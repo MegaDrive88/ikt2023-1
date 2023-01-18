@@ -1,5 +1,4 @@
 import tkinter
-import sys
 from commands import *
 from PIL import Image, ImageTk
 import classes
@@ -10,11 +9,28 @@ ablak.configure(bg='#ffffff')
 ablak.resizable(width=False, height=False)
 ablak.title('Bob\'s trip in HELL')
 focanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ffffff', relief='flat') # 230259
+def biztoshkilepszV2():
+    focanvas.pack_forget()
+    global subc
+    subc = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ffffff', relief='flat')
+    ablak.title("Exit")
+    cim3 = tkinter.Label(ablak, text = 'Are you sure?', font = ('Fette UNZ Fraktur', 40), foreground = '#850505', background='#ffffff')
+    igengomb = tkinter.Button(ablak, height = 1, width= 5, text='Yes', font = ('Fette UNZ Fraktur', 25), relief='ridge' , background='#fcba03', foreground='#850505', command=kilepigen)
+    nemgomb = tkinter.Button(ablak, height = 1, width= 5, text='No', font = ('Fette UNZ Fraktur', 25), relief='ridge' , background='#fcba03', foreground='#850505', command=kilepnem)
+
+    subc.create_window(512, 110, window = cim3)
+    subc.create_window(341, 250, window = igengomb)
+    subc.create_window(683, 250, window = nemgomb)
+    subc.pack()
+def kilepnem():
+    focanvas.pack()
+    subc.pack_forget()
+    ablak.title('Bob\'s trip in HELL')
 cim = tkinter.Label(ablak, text = 'Bob\'s trip in', font = ('Fette UNZ Fraktur', 50), foreground = '#850505', background='#ffffff')
 cim2 = tkinter.Label(ablak, text = 'hell', font = ('Fette UNZ Fraktur', 80), foreground = '#850505', background='#ffffff')
 startgomb = tkinter.Button(height = 1, width= 12, text='Start game', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', command = gamestart)
 helpgomb = tkinter.Button(height = 1, width= 12, text='Help', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', command = segitseg)
-exitgomb = tkinter.Button(height = 1, width= 12, text='Exit', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', command = biztoshkilepsz)# command = u sure?
+exitgomb = tkinter.Button(height = 1, width= 12, text='Exit', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', command = biztoshkilepszV2)
 
 tuzkep = Image.open('tuz2.png')
 test = ImageTk.PhotoImage(tuzkep)
