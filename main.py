@@ -48,19 +48,19 @@ focanvas.create_window(512, 290, window = startgomb)
 focanvas.create_window(512, 360, window = helpgomb)
 focanvas.create_window(512, 430, window = exitgomb)
 #RAJZOLÁS
-# def get_x_and_y(event):
-#     global lasx, lasy
-#     lasx, lasy = event.x, event.y
+def get_x_and_y(event):
+    global lasx, lasy
+    lasx, lasy = event.x, event.y
 
-# def draw_smth(event):
-#     global lasx, lasy
-#     focanvas.create_line((lasx, lasy, event.x, event.y), 
-#                       fill='red', 
-#                       width=5)
-#     lasx, lasy = event.x, event.y
-# focanvas.bind("<Button-1>", get_x_and_y)
-# focanvas.bind("<B1-Motion>", draw_smth)
-# tag_lower()
+def draw_smth(event):
+    global lasx, lasy
+    focanvas.create_line((lasx, lasy, event.x, event.y), 
+                    fill='#850505', 
+                    width=2)
+    lasx, lasy = event.x, event.y
+focanvas.bind("<Button-1>", get_x_and_y)
+focanvas.bind("<B1-Motion>", draw_smth)
+# # # tag_lower()
 
 focanvas.pack()
 
