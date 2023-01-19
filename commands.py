@@ -1,8 +1,14 @@
 import webbrowser
 import tkinter
 import sys
-def gamestart():
-    pass
+from events import *
+def gamestart(bezar, megnyit, enemies, items, inventory, save):
+    bezar.pack_forget()
+    megnyit.pack()
+    enemyread(enemies)
+    itemread(items)
+    saveread(save)
+
 def segitseg():
     webbrowser.open_new(r"help.html")
 def biztoshkilepsz():

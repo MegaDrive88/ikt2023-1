@@ -4,6 +4,11 @@ def enemyread(lista):
     for i in file:
         lista.append(Enemy(i))
     file.close()
+def itemread(lista):
+    file = open('allitems.txt' , 'r', encoding='utf-8')
+    for i in file:
+        lista.append(Item(i))
+    file.close()
 def saveread(lista, modszer):
     file = open('save.txt' , modszer, encoding='utf-8')
     if modszer == 'r':

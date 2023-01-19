@@ -4,6 +4,10 @@ from PIL import Image, ImageTk
 import classes
 import events
 # import customtkinter
+enemies = []
+allitems = []
+inventory = []
+save = []
 ablak = tkinter.Tk()
 ablak.configure(bg='#ffffff')
 ablak.resizable(width=False, height=False)
@@ -26,9 +30,10 @@ def kilepnem():
     focanvas.pack()
     subc.pack_forget()
     ablak.title('Bob\'s trip in HELL')
+gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ffffff', relief='flat')
 cim = tkinter.Label(ablak, text = 'Bob\'s trip in', font = ('Fette UNZ Fraktur', 50), foreground = '#850505', background='#ffffff')
 cim2 = tkinter.Label(ablak, text = 'hell', font = ('Fette UNZ Fraktur', 80), foreground = '#850505', background='#ffffff')
-startgomb = tkinter.Button(height = 1, width= 12, text='Start game', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = gamestart)
+startgomb = tkinter.Button(height = 1, width= 12, text='Start game', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: gamestart(focanvas, gamecanvas, enemies, allitems, inventory, save))
 helpgomb = tkinter.Button(height = 1, width= 12, text='Help', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = segitseg)
 exitgomb = tkinter.Button(height = 1, width= 12, text='Exit', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = biztoshkilepszV2)
 
