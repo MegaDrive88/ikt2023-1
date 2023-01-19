@@ -11,3 +11,4 @@ def saveread(lista, modszer):
             lista.append(i)
     else:
         return file
+    file.close()
