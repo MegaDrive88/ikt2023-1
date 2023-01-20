@@ -1,1 +1,1 @@
-test_goblin, 1, False
+test_goblin; 1; 123; 0

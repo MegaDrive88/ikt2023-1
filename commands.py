@@ -2,13 +2,17 @@ import webbrowser
 import tkinter
 import sys
 from events import *
-def gamestart(bezar, megnyit, enemies, items, inventory, save):
-    bezar.pack_forget()
-    megnyit.pack()
+def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemyread(enemies)
     itemread(items)
-    saveread(save)
-
+    saveread(save, 'r')
+    invread(inventory, 'a')
+    bezar.pack_forget()
+    global gamecanvas
+    gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#230259', relief='flat')
+    gamecanvas.pack()
+    # test_label = tkinter.Label(text='anyád')
+    # gamecanvas.create_window(200, 200, window=test_label)
 def segitseg():
     webbrowser.open_new(r"help.html")
 def biztoshkilepsz():

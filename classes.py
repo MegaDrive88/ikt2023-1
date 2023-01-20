@@ -1,9 +1,10 @@
 class Enemy:
     def __init__(self ,sor):
-        data = sor.strip().split(',')
+        data = sor.strip().split(';')
         self.name = data[0]
         self.hp = int(data[1])
-        self.isBoss = bool(data[2])
+        self.appearsAt = tuple(data[2][0:0] + '' + data[2][1:])
+        self.isBoss = bool(int(data[3]))
 class Item: # 4 hosszú mindegyik type, kivéve mag nál
     def __init__(self, sor):
         data = sor.strip().split(',')
