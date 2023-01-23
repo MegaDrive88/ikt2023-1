@@ -66,4 +66,3 @@ ablak.mainloop()
 
 # pip install pillow
 # pip install customtkinter
-# startgame nagyobb ablak
