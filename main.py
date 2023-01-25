@@ -41,7 +41,6 @@ tuzkep = Image.open('tuz2.png')
 kep = ImageTk.PhotoImage(tuzkep)
 keplabel = tkinter.Label(image=kep, background='#ffffff')
 focanvas.create_window(512, 630, window = keplabel)
-
 focanvas.create_window(400, 120, window = cim)
 focanvas.create_window(700, 130, window = cim2)
 focanvas.create_window(512, 290, window = startgomb)
@@ -55,9 +54,11 @@ def get_x_and_y(event):
 def draw_smth(event):
     global lasx, lasy
     focanvas.create_line((lasx, lasy, event.x, event.y), fill='#850505', width=2)
+    
     lasx, lasy = event.x, event.y
 focanvas.bind("<Button-1>", get_x_and_y)
 focanvas.bind("<B1-Motion>", draw_smth)
+
 # # # tag_lower()
 
 focanvas.pack()
