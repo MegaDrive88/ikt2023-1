@@ -24,8 +24,13 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     wavecounter = tkinter.Label(ablak, height=5, width=15, background='#ffffff', text="wavecounter", relief='flat')#, command=wavecounter)
     kilep = tkinter.Button(ablak, height=2, width=15, background='#ffffff', text="Exit", relief='flat')#, command=biztoshkilepszV2)
     enemy1 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
+    enemy2 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
+    enemy3 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
 
-    gamecanvas.create_window(500, 500, window=enemy1)
+
+    gamecanvas.create_window(512, 250, window=enemy1)
+    gamecanvas.create_window(312, 150, window=enemy2)
+    gamecanvas.create_window(712, 150, window=enemy3)
     gamecanvas.create_window(130, 715, window=item1)
     gamecanvas.create_window(386, 715, window=item2)
     gamecanvas.create_window(642, 715, window=item3)
