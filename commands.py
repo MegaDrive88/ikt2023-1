@@ -3,7 +3,7 @@ import tkinter
 import sys
 from PIL import Image, ImageTk
 from events import *
-
+import random
 def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemyread(enemies)
     itemread(items)
@@ -11,33 +11,32 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     invread(inventory, 'a')
     bezar.pack_forget()
     global gamecanvas
-    gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#230259', relief='flat')
+    gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#bbbbbb', relief='flat') # 230259
     gamecanvas.pack()
     item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1')
     item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2')
     item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3')
     item4 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item4')
     backpackhossza = tkinter.Label(ablak, height=2, width=5, text=len(inventory))
-    reroll = tkinter.Button(ablak, height=5, width=10, background='#ffffff', text="rerollkep")#, command=rerollbutton)
-    #elfelejtettem ez a gomb mit akarˇ passol. Kihagy egy kört... relief?
-    passgomb = tkinter.Button(ablak, height=5, width=10, background='#ffffff', text="valamikep")#, command=valamibutton)
-    trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep")#, command=trashbutton) 
-    wavecounter = tkinter.Label(ablak, height=6, width=15, background='#ffffff', text="wavecounter")#, command=wavecounter)
-    kilep = tkinter.Button(ablak, height=2, width=15, background='#ffffff', text="Exit")#, command=biztoshkilepszV2)
+    reroll = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="rerollkep", relief='flat')#, command=rerollbutton)
+    passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat')#, command=valamibutton)    , highlightbackground = "#000000", highlightthickness=1, bd = 0
+    trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat')#, command=trashbutton) 
+    wavecounter = tkinter.Label(ablak, height=5, width=15, background='#ffffff', text="wavecounter", relief='flat')#, command=wavecounter)
+    kilep = tkinter.Button(ablak, height=2, width=15, background='#ffffff', text="Exit", relief='flat')#, command=biztoshkilepszV2)
+    enemy1 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
 
+    gamecanvas.create_window(500, 500, window=enemy1)
     gamecanvas.create_window(130, 715, window=item1)
     gamecanvas.create_window(386, 715, window=item2)
     gamecanvas.create_window(642, 715, window=item3)
     gamecanvas.create_window(898, 715, window=item4)
     gamecanvas.create_window(20, 20, window=backpackhossza)
-    gamecanvas.create_window(987, 607, window=reroll)
-    gamecanvas.create_window(54, 560, window=passgomb)
-    gamecanvas.create_window(54, 480, window=trash)
-    gamecanvas.create_window(965, 70, window=wavecounter)
-    gamecanvas.create_window(100, 20, window=kilep)
-    
-    # test_label = tkinter.Label(text='anyád')
-    # gamecanvas.create_window(200, 200, window=test_label)
+    gamecanvas.create_window(967, 607, window=reroll)
+    gamecanvas.create_window(60, 607, window=passgomb)
+    gamecanvas.create_window(36, 536, window=trash)
+    gamecanvas.create_window(970, 42, window=wavecounter)
+    gamecanvas.create_window(99, 17, window=kilep)
+    enemyspawn(enemies, enemy1, '', '', 1)
 def segitseg():
     webbrowser.open_new(r"help.html")
 
@@ -70,5 +69,12 @@ def segitseg():
 #     focanvas.pack()
 
 #     ablak.mainloop()
+def enemyspawn(ebbol, egyik, masik, harmadik, currentlvl):
+    # enemyread(ebbol)
+    mostanra = []
+    for i in ebbol:
+        if str(currentlvl) in i.appearsAt:
+            mostanra.append(i)
+    #kéne rajzolni
 def kilepigen():
     sys.exit()
