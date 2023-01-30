@@ -18,7 +18,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3')
     item4 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item4')
     backpackhossza = tkinter.Label(ablak, height=2, width=5, text=len(inventory))
-    reroll = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="rerollkep", relief='flat')#, command=rerollbutton)
+    rk = Image.open('rerollkep.png').resize((60, 60))
+    rerollkep = ImageTk.PhotoImage(rk)
+    reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="__", relief='flat', image=rerollkep)#, command=rerollbutton)
     passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat')#, command=valamibutton)    , highlightbackground = "#000000", highlightthickness=1, bd = 0
     trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat')#, command=trashbutton) 
     wavecounter = tkinter.Label(ablak, height=5, width=15, background='#ffffff', text="wavecounter", relief='flat')#, command=wavecounter)
@@ -26,6 +28,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
     enemy2 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
     enemy3 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
+    enemy1neve = tkinter.Label(ablak, text='')
+    enemy2neve = tkinter.Label(ablak, text='')
+    enemy3neve = tkinter.Label(ablak, text='')# rakosgasd majd bele pls
 
 
     gamecanvas.create_window(512, 250, window=enemy1)
@@ -36,12 +41,13 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(642, 715, window=item3)
     gamecanvas.create_window(898, 715, window=item4)
     gamecanvas.create_window(20, 20, window=backpackhossza)
-    gamecanvas.create_window(967, 607, window=reroll)
+    gamecanvas.create_window(972, 607, window=reroll)
     gamecanvas.create_window(60, 607, window=passgomb)
     gamecanvas.create_window(36, 536, window=trash)
     gamecanvas.create_window(970, 42, window=wavecounter)
     gamecanvas.create_window(99, 17, window=kilep)
-    enemyspawn(enemies, enemy1, '', '', 1)
+    enemyspawn(enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, 1)
+    ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
 
@@ -74,8 +80,7 @@ def segitseg():
 #     focanvas.pack()
 
 #     ablak.mainloop()
-def enemyspawn(ebbol, egyik, masik, harmadik, currentlvl):
-    # enemyread(ebbol)
+def enemyspawn(ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl):
     mostanra = []
     for i in ebbol:
         if str(currentlvl) in i.appearsAt:

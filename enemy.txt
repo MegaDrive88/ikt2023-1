@@ -1,1 +1,21 @@
-Basic import; 20; 1234; 0
+Basic imp;20;10;1-2-3-4;0
+Previous You;20;10;1-2-3-4;0
+Armored imp;40;10;2-3-4;0
+The Small one;30;10;1-2-3;0
+Infernal imp;30;15;2-3-4;0
+Master Imp;90;20;5;1
+Baphomet;90;20;5;1
+Hellfire Hound;40;20;4-6-7;0
+Hellfire Harpy;40;25;6-7;0
+Damned Devil;50;25;6-7-8;0
+Succubus Siren;70;30;8-9;0
+Shadow Fiend;70;30;7-8-9;0
+Pit Fiend;80;30;7-9-8;0
+Demon Drake;110;35;10;1
+Dimenian;100;35;11;0
+Huge ahh Dragon;110;40;12-13-14;0
+Mericarol;100;40;11-12;0
+Ex-Thief;80;50;13-14;0
+Ex-Liar;100;30;12-13;0
+The Nameless;90;35;11-14;0
+Gabriel himself, AKA the Final boss;150;45;15;1
