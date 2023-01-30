@@ -28,14 +28,17 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
     enemy2 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
     enemy3 = tkinter.Button(ablak, background='#ff0000', height=10, width=8)
-    enemy1neve = tkinter.Label(ablak, text='')
-    enemy2neve = tkinter.Label(ablak, text='')
-    enemy3neve = tkinter.Label(ablak, text='')# rakosgasd majd bele pls
+    enemy1neve = tkinter.Label(ablak, text='enemy1', height=2, width=6, background='#ff0000')
+    enemy2neve = tkinter.Label(ablak, text='enemy2', height=2, width=6, background='#ff0000')
+    enemy3neve = tkinter.Label(ablak, text='enemy3', height=2, width=6, background='#ff0000')# rakosgasd majd bele pls
 
 
     gamecanvas.create_window(512, 250, window=enemy1)
     gamecanvas.create_window(312, 150, window=enemy2)
     gamecanvas.create_window(712, 150, window=enemy3)
+    gamecanvas.create_window(512, 352, window=enemy1neve)
+    gamecanvas.create_window(312, 252, window=enemy2neve)
+    gamecanvas.create_window(712, 252, window=enemy3neve)
     gamecanvas.create_window(130, 715, window=item1)
     gamecanvas.create_window(386, 715, window=item2)
     gamecanvas.create_window(642, 715, window=item3)
