@@ -1,7 +1,7 @@
 Basic sword, atk, 10, 1, 1
 Stainless sword, atk, 10, 3, 1
 Silver sword, atk, 10, 5, 1
-Damasced sword, atk, 10, 15, 1
+Damasced sword, atk, 10, 15, 2
 Cursed sword, atk, 40, 12, 3
 Sword of Gabriel himself, atk, 70, 20, 5
 Basic mace, atk, 15, 5, 1
