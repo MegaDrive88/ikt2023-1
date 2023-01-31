@@ -6,7 +6,7 @@ Cursed sword, atk, 40, 12, 3
 Sword of Gabriel himself, atk, 70, 20, 5
 Basic mace, atk, 15, 5, 1
 Damasced mace, atk, 18, 10, 3
-Mace of the survivor, mag, 0, 90, 90, energyrestore, 5
+Mace of the survivor, mag, 0, 90, 90, energyrestore, 9
 Basic shield, def, 2, 5, 1
 Hardened round shield, def, 5, 10, 2
 Blessed shield, def, 5, 20, 2

@@ -15,10 +15,12 @@ class Item: # 4 hosszú mindegyik type, kivéve mag nál
         self.energy = int(data[2])
         if self.type == ' atk':
             self.damage = int(data[3])
+            self.rese = int(data[4])
         elif self.type == ' def':
             self.defense = int(data[3])
+            self.rese = int(data[4])
         elif self.type == ' mag':
             self.damage = int(data[3])
+            self.perkValue = int(data[4])
             self.perk = data[5]
-            self.perkValue = int(data[6])
-        self.rese = int(data[4]) #ritkasagerossegszintegyutthato
+            self.rese = int(data[6])  #ritkasagerossegszintegyutthato
