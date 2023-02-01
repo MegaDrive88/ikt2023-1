@@ -36,13 +36,14 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
-    potilabel = tkinter.Label(ablak, text='')
-    bosslabel = tkinter.Label(ablak, text='')
-    helplabel = tkinter.Label(ablak, text='')
+    potilabel = tkinter.Label(ablak, text='', width= 40)
+    bosslabel = tkinter.Label(ablak, text='', height=5, width = 17, background='#ffffff')
+    boblabel = tkinter.Label(ablak, background='#ffffff', height=10, width=8, relief='flat')
 
     gamecanvas.create_window(512, 250, window=enemy1)
     gamecanvas.create_window(312, 150, window=enemy2)
     gamecanvas.create_window(712, 150, window=enemy3)
+    gamecanvas.create_window(512, 535, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
     gamecanvas.create_window(312, 252, window=enemy2neve)
     gamecanvas.create_window(712, 252, window=enemy3neve)
@@ -54,7 +55,10 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(972, 607, window=reroll)
     gamecanvas.create_window(60, 607, window=passgomb)
     gamecanvas.create_window(36, 536, window=trash)
-    gamecanvas.create_window(970, 42, window=wavecounter)
+    gamecanvas.create_window(969, 43, window=wavecounter)
+    if level == 1:
+        gamecanvas.create_window(967, 127, window=bosslabel)
+    gamecanvas.create_window(512, 390, window=potilabel)
     gamecanvas.create_window(99, 17, window=kilep)
     enemyspawn(enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
     itemgenerate(items, item1, item2, item3, item4, level)
@@ -89,6 +93,14 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
 
 
 #def wavecounter():
+
+# def enemyTakingDamage():
+#     enemyHealth = Enemy.hp
+#     activeItem = 
+#     if Item.type == 'mag':
+#         enemyHealth -= Item.damage
+
+
 
 
 # def biztoshkilepsz():
