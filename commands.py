@@ -36,13 +36,13 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
-    potilabel = tkinter.Label(ablak, text='', width= 40)
+    potilabel = tkinter.Label(ablak, text='', padx=0)
     bosslabel = tkinter.Label(ablak, text='', height=5, width = 17, background='#ffffff')
     boblabel = tkinter.Label(ablak, background='#ffffff', height=10, width=8, relief='flat')
 
-    gamecanvas.create_window(512, 250, window=enemy1)
-    gamecanvas.create_window(312, 150, window=enemy2)
-    gamecanvas.create_window(712, 150, window=enemy3)
+    gamecanvas.create_window(512, 230, window=enemy1)
+    gamecanvas.create_window(312, 130, window=enemy2)
+    gamecanvas.create_window(712, 130, window=enemy3)
     gamecanvas.create_window(512, 535, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
     gamecanvas.create_window(312, 252, window=enemy2neve)
@@ -56,8 +56,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(60, 607, window=passgomb)
     gamecanvas.create_window(36, 536, window=trash)
     gamecanvas.create_window(969, 43, window=wavecounter)
-    if level == 1:
-        gamecanvas.create_window(967, 127, window=bosslabel)
+    gamecanvas.create_window(967, 127, window=bosslabel)
+    if level % 5 == 0:
+        bosslabel.config(text='Boss')
     gamecanvas.create_window(512, 390, window=potilabel)
     gamecanvas.create_window(99, 17, window=kilep)
     enemyspawn(enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
@@ -128,8 +129,8 @@ def enemyspawn(ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve
         if str(currentlvl) in i.appearsAt:
             mostanra.append(i)
     if currentlvl % 5 != 0:
-        gamecanvas.create_window(312, 150, window=masik)
-        gamecanvas.create_window(712, 150, window=harmadik)
+        gamecanvas.create_window(312, 130, window=masik)
+        gamecanvas.create_window(712, 130, window=harmadik)
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
         ek = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
@@ -148,15 +149,19 @@ def enemyspawn(ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve
         global hkk
         hkk = ImageTk.PhotoImage(hk) 
         harmadik.config(image = hkk)
+        masik.config(width = 120, height = 200)
+        harmadik.config(width = 120, height = 200)
     else:
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
-        ek = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
+        bk = Image.open(f'enemies/{ec.name}.png')
         global bkk
-        bkk = ImageTk.PhotoImage(ek) 
-        egyik.config(image = ekk)
+        bkk = ImageTk.PhotoImage(bk) 
+        egyik.config(image = bkk)
         masik.pack_forget()
         harmadik.pack_forget()
+        masik.config(width = 0, height = 0)
+        harmadik.config(width = 0, height = 0)
     # egyik. ---kép
 def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
     listaa = []
