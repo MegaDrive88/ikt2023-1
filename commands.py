@@ -28,7 +28,7 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="__", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
     passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat')#, command=valamibutton)    , highlightbackground = "#000000", highlightthickness=1, bd = 0
     trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat')#, command=trashbutton) 
-    wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))#, command=wavecounter)
+    wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
     kilep = tkinter.Button(ablak, height=2, width=15, background='#ffffff', text="Exit", relief='flat')#, command=biztoshkilepszV2)
     enemy1 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
     enemy2 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
@@ -59,6 +59,8 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(967, 127, window=bosslabel)
     if level % 5 == 0:
         bosslabel.config(text='Boss')
+    else:
+        bosslabel.config(text='')
     gamecanvas.create_window(512, 390, window=potilabel)
     gamecanvas.create_window(99, 17, window=kilep)
     enemyspawn(enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
@@ -183,4 +185,11 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
                     ei = random.choice(ebbol)
         listaa[i].config(text = ei.name)
     pass
-    # lkkt 45, lnko 3, közelítés
+# commandok egyesével
+valasztott = 9
+def item1press(item):
+    valasztott = int(item.widget.cget("text"))
+# def flipper(event):
+#     print("label text:", event.widget.cget("text"))
+def selectitem(ebbol, item1, item2, item3, item4, potilabel):
+    pass
