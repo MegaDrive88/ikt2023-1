@@ -11,36 +11,38 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     invread(inventory, 'a')
     bezar.pack_forget()
     global gamecanvas
-    gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#bbbbbb', relief='flat') # 230259
+    bg = Image.open('hatter.jpg').resize((1050, 790))
+    bbg = ImageTk.PhotoImage(bg)
+    gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ff7500', relief='flat') # 230259
+    gamecanvas.create_image(512, 395, image = bbg)
     gamecanvas.pack()
     level = 1
-    reroll = True
     turn = 0
     item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1')
     item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2')
     item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3')
     item4 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item4')
-    backpackhossza = tkinter.Label(ablak, height=2, width=5, text=len(inventory))
+    backpackhossza = tkinter.Label(ablak, height=2, width=5, text=len(inventory), background='#ffffff')
     rk = Image.open('rerollkep.png').resize((60, 60))
     rerollkep = ImageTk.PhotoImage(rk)
-    reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="__", relief='flat', image=rerollkep, command= lambda: rerollbutton(reroll, items, level, item1, item2, item3, item4, potilabel))
+    reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="__", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
     passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat')#, command=valamibutton)    , highlightbackground = "#000000", highlightthickness=1, bd = 0
     trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat')#, command=trashbutton) 
-    wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ffffff', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))#, command=wavecounter)
+    wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))#, command=wavecounter)
     kilep = tkinter.Button(ablak, height=2, width=15, background='#ffffff', text="Exit", relief='flat')#, command=biztoshkilepszV2)
-    enemy1 = tkinter.Button(ablak, background='#ff0000', height=10, width=8, relief='flat')
-    enemy2 = tkinter.Button(ablak, background='#ff0000', height=10, width=8, relief='flat')
-    enemy3 = tkinter.Button(ablak, background='#ff0000', height=10, width=8, relief='flat')
-    enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#bbbbbb')
-    enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#bbbbbb')
-    enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#bbbbbb')
-    potilabel = tkinter.Label(ablak, text='', width= 40)
+    enemy1 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
+    enemy2 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
+    enemy3 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
+    enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
+    enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
+    enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
+    potilabel = tkinter.Label(ablak, text='', padx=0)
     bosslabel = tkinter.Label(ablak, text='', height=5, width = 17, background='#ffffff')
     boblabel = tkinter.Label(ablak, background='#ffffff', height=10, width=8, relief='flat')
 
-    gamecanvas.create_window(512, 250, window=enemy1)
-    gamecanvas.create_window(312, 150, window=enemy2)
-    gamecanvas.create_window(712, 150, window=enemy3)
+    gamecanvas.create_window(512, 230, window=enemy1)
+    gamecanvas.create_window(312, 130, window=enemy2)
+    gamecanvas.create_window(712, 130, window=enemy3)
     gamecanvas.create_window(512, 535, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
     gamecanvas.create_window(312, 252, window=enemy2neve)
@@ -54,35 +56,35 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(60, 607, window=passgomb)
     gamecanvas.create_window(36, 536, window=trash)
     gamecanvas.create_window(969, 43, window=wavecounter)
-    if level == 1:
-        gamecanvas.create_window(967, 127, window=bosslabel)
+    gamecanvas.create_window(967, 127, window=bosslabel)
+    if level % 5 == 0:
+        bosslabel.config(text='Boss')
     gamecanvas.create_window(512, 390, window=potilabel)
     gamecanvas.create_window(99, 17, window=kilep)
     enemyspawn(enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
     itemgenerate(items, item1, item2, item3, item4, level)
     # while level < 16:
+    
     ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
 
-def rerollbutton(lehete, ebbol, lvl, item1, item2, item3, item4, potilabel):
-    if lehete:
-        listaa = []
-        listaa.append(item1)
-        listaa.append(item2)
-        listaa.append(item3)
-        listaa.append(item4)
-        for i in range(0, 4):
+def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
+    listaa = []
+    listaa.append(item1)
+    listaa.append(item2)
+    listaa.append(item3)
+    listaa.append(item4)
+    for i in range(0, 4):
+        ei = random.choice(ebbol)
+        if ei.rese*5 - lvl*3 <= 7:
             ei = random.choice(ebbol)
-            if ei.rese*5 - lvl*3 <= 7:
-                ei = random.choice(ebbol)
-                if ei.rese*5 - lvl*3 <= 12:
+            if ei.rese*5 - lvl*3 <= 12:
+                ei = random.choice(ebbol) 
+                while ei.rese < lvl/3:
                     ei = random.choice(ebbol) 
-                    while ei.rese < lvl/3:
-                        ei = random.choice(ebbol) 
-            listaa[i].config(text = ei.name)
-    else:
-        pass
+        listaa[i].config(text = ei.name)
+    gomb["state"] = "disabled"
 
 
 #def valamibutton():
@@ -127,19 +129,39 @@ def enemyspawn(ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve
         if str(currentlvl) in i.appearsAt:
             mostanra.append(i)
     if currentlvl % 5 != 0:
-        gamecanvas.create_window(312, 150, window=masik)
-        gamecanvas.create_window(712, 150, window=harmadik)
+        gamecanvas.create_window(312, 130, window=masik)
+        gamecanvas.create_window(712, 130, window=harmadik)
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
+        ek = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
+        global ekk
+        ekk = ImageTk.PhotoImage(ek) 
+        egyik.config(image = ekk)
         ec = random.choice(mostanra)
         masikneve.config(text = f'{ec.name}, {ec.hp}')
+        mk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
+        global mkk
+        mkk = ImageTk.PhotoImage(mk) 
+        masik.config(image = mkk)
         ec = random.choice(mostanra)
         harmadikneve.config(text = f'{ec.name}, {ec.hp}')
+        hk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
+        global hkk
+        hkk = ImageTk.PhotoImage(hk) 
+        harmadik.config(image = hkk)
+        masik.config(width = 120, height = 200)
+        harmadik.config(width = 120, height = 200)
     else:
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
+        bk = Image.open(f'enemies/{ec.name}.png')
+        global bkk
+        bkk = ImageTk.PhotoImage(bk) 
+        egyik.config(image = bkk)
         masik.pack_forget()
         harmadik.pack_forget()
+        masik.config(width = 0, height = 0)
+        harmadik.config(width = 0, height = 0)
     # egyik. ---kép
 def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
     listaa = []
@@ -158,7 +180,7 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
             if ei.rese*5 - lvl*3 <= 12:
                 ei = random.choice(ebbol)
                 while ei.rese < lvl/3:
-                        ei = random.choice(ebbol)
+                    ei = random.choice(ebbol)
         listaa[i].config(text = ei.name)
     pass
     # lkkt 45, lnko 3, közelítés

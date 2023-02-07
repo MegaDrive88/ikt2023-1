@@ -1,5 +1,5 @@
 Basic imp;20;10;1-2-3-4;0
-Previous You;20;10;1-2-3-4;0
+Pecker Puck;20;10;1-2-3-4;0
 Armored imp;40;10;2-3-4;0
 The Small one;30;10;1-2-3;0
 Infernal imp;30;15;2-3-4;0
