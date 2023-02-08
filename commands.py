@@ -18,10 +18,10 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.pack()
     level = 1
     turn = 0
-    item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1')
-    item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2')
-    item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3')
-    item4 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item4')
+    item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1', name='1')
+    item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2', name='2')
+    item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3', name='3')
+    item4 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item4', name='4')
     # backpackhossza = tkinter.Label(ablak, height=2, width=5, text=len(inventory), background='#ffffff')
     rk = Image.open('rerollkep.png').resize((60, 60))
     rerollkep = ImageTk.PhotoImage(rk)
@@ -39,6 +39,10 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     potilabel = tkinter.Label(ablak, text='', padx=0)
     bosslabel = tkinter.Label(ablak, text='', height=5, width = 17, background='#ffffff')
     boblabel = tkinter.Label(ablak, background='#ffffff', height=10, width=8, relief='flat')
+    item1.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
+    item2.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
+    item3.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
+    item4.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
 
     gamecanvas.create_window(512, 230, window=enemy1)
     gamecanvas.create_window(312, 130, window=enemy2)
@@ -86,6 +90,7 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
                 while ei.rese < lvl/3:
                     ei = random.choice(ebbol) 
         listaa[i].config(text = ei.name)
+    potilabel.config(text = 'You have n rerolls in this round')
     gomb["state"] = "disabled"
 
 
@@ -186,10 +191,26 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
         listaa[i].config(text = ei.name)
     pass
 # commandok egyesével
-valasztott = 9
-def item1press(item):
-    valasztott = int(item.widget.cget("text"))
+# global valasztott
+# valasztott = 'a'
+def item1press(event, potilabel, ebbol):
+    valasztott = event.widget.cget("text")
+    neve = str(event.widget).split(".")[-1]
+    mittud = ''
+    for i in ebbol:
+        if i.name == valasztott:
+            if i.type == ' atk':
+                mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage}'
+            elif i.type == ' def':
+                mittud = f'{valasztott}\nMana cost: {i.energy}, Defense: {i.defense}'
+            elif i.type == ' mag':
+                mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage}\nPerk: {i.perk}, {i.perkValue}'
+    potilabel.config(text = mittud)
+    return valasztott, neve
+
 # def flipper(event):
 #     print("label text:", event.widget.cget("text"))
-def selectitem(ebbol, item1, item2, item3, item4, potilabel):
+# def flipper(event):
+#     print("widget name:", str(event.widget).split(".")[-1])
+def selectitem(potilabel): #ebbol, item1, item2, item3, item4, 
     pass
