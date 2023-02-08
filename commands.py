@@ -30,9 +30,6 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat')#, command=trashbutton) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
     kilep = tkinter.Button(ablak, height=2, width=5, background='#ffffff', text="Exit", relief='flat')#, command=biztoshkilepszV2)
-    enemy1 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
-    enemy2 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
-    enemy3 = tkinter.Button(ablak, background='#ff7500', height=200, width=120, relief='flat', activebackground="#ff7500")
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
@@ -43,10 +40,12 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     item2.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
     item3.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
     item4.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
-
-    gamecanvas.create_window(512, 230, window=enemy1)
-    gamecanvas.create_window(312, 130, window=enemy2)
-    gamecanvas.create_window(712, 130, window=enemy3)
+    e1k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
+    e2k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
+    e3k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
+    enemy1 = gamecanvas.create_image(512, 230, image = e1k)
+    enemy2 = gamecanvas.create_image(312, 130, image = e2k)
+    enemy3 = gamecanvas.create_image(712, 130, image = e3k)
     gamecanvas.create_window(512, 535, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
     gamecanvas.create_window(312, 252, window=enemy2neve)
@@ -65,9 +64,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
         bosslabel.config(text='Boss')
     else:
         bosslabel.config(text='')
-    gamecanvas.create_window(512, 390, window=potilabel)
+    gamecanvas.create_window(512, 400, window=potilabel)
     gamecanvas.create_window(20, 17, window=kilep)
-    enemyspawn(enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
+    enemyspawn(enemies, e1k, e2k, e3k, enemy1neve, enemy2neve, enemy3neve, level)
     itemgenerate(items, item1, item2, item3, item4, level)
     # while level < 16:
     
@@ -136,28 +135,28 @@ def enemyspawn(ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve
         if str(currentlvl) in i.appearsAt:
             mostanra.append(i)
     if currentlvl % 5 != 0:
-        gamecanvas.create_window(312, 130, window=masik)
-        gamecanvas.create_window(712, 130, window=harmadik)
+        gamecanvas.create_image(312, 130, image=masik)
+        gamecanvas.create_image(712, 130, image=harmadik)
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
-        ek = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
         global ekk
-        ekk = ImageTk.PhotoImage(ek) 
-        egyik.config(image = ekk)
+        ekk = ImageTk.PhotoImage(Image.open(f'enemies/{ec.name}.png').resize((100, 200))) 
+        # egyik.config(image = ekk)
+        gamecanvas.create_image(512, 230, image=ekk)
         ec = random.choice(mostanra)
-        masikneve.config(text = f'{ec.name}, {ec.hp}')
-        mk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
-        global mkk
-        mkk = ImageTk.PhotoImage(mk) 
-        masik.config(image = mkk)
-        ec = random.choice(mostanra)
-        harmadikneve.config(text = f'{ec.name}, {ec.hp}')
-        hk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
-        global hkk
-        hkk = ImageTk.PhotoImage(hk) 
-        harmadik.config(image = hkk)
-        masik.config(width = 120, height = 200)
-        harmadik.config(width = 120, height = 200)
+        # masikneve.config(text = f'{ec.name}, {ec.hp}')
+        # mk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
+        # global mkk
+        # mkk = ImageTk.PhotoImage(mk) 
+        # masik.config(image = mkk)
+        # ec = random.choice(mostanra)
+        # harmadikneve.config(text = f'{ec.name}, {ec.hp}')
+        # hk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
+        # global hkk
+        # hkk = ImageTk.PhotoImage(hk) 
+        # harmadik.config(image = hkk)
+        # masik.config(width = 120, height = 200)
+        # harmadik.config(width = 120, height = 200)
     else:
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
@@ -204,7 +203,7 @@ def item1press(event, potilabel, ebbol):
             elif i.type == ' def':
                 mittud = f'{valasztott}\nMana cost: {i.energy}, Defense: {i.defense}'
             elif i.type == ' mag':
-                mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage}\nPerk: {i.perk}, {i.perkValue}'
+                mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage}\nPerk: {i.perk}: {i.perkValue}'
     potilabel.config(text = mittud)
     return valasztott, neve
 
