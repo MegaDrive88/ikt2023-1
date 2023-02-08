@@ -4,6 +4,7 @@ import sys
 from PIL import Image, ImageTk
 from events import *
 import random
+import time
 def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemyread(enemies)
     itemread(items)
@@ -43,13 +44,13 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     e1k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
     e2k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
     e3k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
-    enemy1 = gamecanvas.create_image(512, 230, image = e1k)
-    enemy2 = gamecanvas.create_image(312, 130, image = e2k)
-    enemy3 = gamecanvas.create_image(712, 130, image = e3k)
+    enemy1 = gamecanvas.create_image(512, 230, image = None)
+    enemy2 = gamecanvas.create_image(312, 130, image = None)
+    enemy3 = gamecanvas.create_image(712, 130, image = None)
     gamecanvas.create_window(512, 535, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
-    gamecanvas.create_window(312, 252, window=enemy2neve)
-    gamecanvas.create_window(712, 252, window=enemy3neve)
+    t2 = gamecanvas.create_window(312, 252, window=enemy2neve)
+    t3 = gamecanvas.create_window(712, 252, window=enemy3neve)
     gamecanvas.create_window(130, 715, window=item1)
     gamecanvas.create_window(386, 715, window=item2)
     gamecanvas.create_window(642, 715, window=item3)
@@ -62,11 +63,17 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(970, 127, window=bosslabel)
     if level % 5 == 0:
         bosslabel.config(text='Boss')
-    else:
+    if level % 5 != 0:
         bosslabel.config(text='')
     gamecanvas.create_window(512, 400, window=potilabel)
     gamecanvas.create_window(20, 17, window=kilep)
-    enemyspawn(enemies, e1k, e2k, e3k, enemy1neve, enemy2neve, enemy3neve, level)
+    enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level, t2, t3)
+    # time.sleep(1)
+    # level += 1
+    # wavecounter.config(text=level)
+    # enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level, t2, t3)
+    # if level % 5 == 0:
+    #     gamecanvas.itemconfig(enemy2, image = None)
     itemgenerate(items, item1, item2, item3, item4, level)
     # while level < 16:
     
@@ -129,46 +136,41 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
 #     ablak.mainloop()
 def kilepigen():
     sys.exit()
-def enemyspawn(ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl):
+def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl, t2, t3):
     mostanra = []
     for i in ebbol:
         if str(currentlvl) in i.appearsAt:
             mostanra.append(i)
     if currentlvl % 5 != 0:
-        gamecanvas.create_image(312, 130, image=masik)
-        gamecanvas.create_image(712, 130, image=harmadik)
+        masik = gamecanvas.create_image(312, 130)
+        harmadik = gamecanvas.create_image(712, 130)
+        t2 = gamecanvas.create_window(312, 252, window=masikneve)
+        t3 = gamecanvas.create_window(712, 252, window=harmadikneve)
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
         global ekk
         ekk = ImageTk.PhotoImage(Image.open(f'enemies/{ec.name}.png').resize((100, 200))) 
-        # egyik.config(image = ekk)
-        gamecanvas.create_image(512, 230, image=ekk)
+        ablak.itemconfig(egyik, image = ekk)
         ec = random.choice(mostanra)
-        # masikneve.config(text = f'{ec.name}, {ec.hp}')
-        # mk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
-        # global mkk
-        # mkk = ImageTk.PhotoImage(mk) 
-        # masik.config(image = mkk)
-        # ec = random.choice(mostanra)
-        # harmadikneve.config(text = f'{ec.name}, {ec.hp}')
-        # hk = Image.open(f'enemies/{ec.name}.png').resize((100, 200))
-        # global hkk
-        # hkk = ImageTk.PhotoImage(hk) 
-        # harmadik.config(image = hkk)
-        # masik.config(width = 120, height = 200)
-        # harmadik.config(width = 120, height = 200)
+        masikneve.config(text = f'{ec.name}, {ec.hp}')
+        global mkk
+        mkk = ImageTk.PhotoImage(Image.open(f'enemies/{ec.name}.png').resize((100, 200))) 
+        ablak.itemconfig(masik, image = mkk)
+        harmadikneve.config(text = f'{ec.name}, {ec.hp}')
+        global hkk
+        hkk = ImageTk.PhotoImage(Image.open(f'enemies/{ec.name}.png').resize((100, 200))) 
+        ablak.itemconfig(harmadik, image = hkk)
     else:
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
-        bk = Image.open(f'enemies/{ec.name}.png')
         global bkk
-        bkk = ImageTk.PhotoImage(bk) 
-        egyik.config(image = bkk)
-        masik.pack_forget()
-        harmadik.pack_forget()
-        masik.config(width = 0, height = 0)
-        harmadik.config(width = 0, height = 0)
-    # egyik. ---kép
+        bkk = ImageTk.PhotoImage(Image.open(f'enemies/{ec.name}.png').resize((100, 200)))
+        ablak.itemconfig(egyik, image = bkk)
+        # ablak.itemconfig(masik, image = None)
+        # ablak.delete(masik)
+        # ablak.delete(harmadik)
+        # ablak.delete(t2)
+        # ablak.delete(t3)
 def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
     listaa = []
     listaa.append(item1)
