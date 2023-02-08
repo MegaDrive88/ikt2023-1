@@ -29,6 +29,9 @@ p{
 }
 
 body{
-    
+    background: "helpbg.jpg";
+    background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
+    background: blur(10px);
 }
