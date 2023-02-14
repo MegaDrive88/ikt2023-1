@@ -17,13 +17,12 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ff7500', relief='flat') # 230259
     gamecanvas.create_image(512, 395, image = bbg)
     gamecanvas.pack()
-    level = 1
+    level = 0
     turn = 0
     item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1', name='1')
     item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2', name='2')
     item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3', name='3')
     item4 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item4', name='4')
-    # backpackhossza = tkinter.Label(ablak, height=2, width=5, text=len(inventory), background='#ffffff')
     rk = Image.open('rerollkep.png').resize((60, 60))
     rerollkep = ImageTk.PhotoImage(rk)
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="__", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
@@ -41,42 +40,38 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     item2.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
     item3.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
     item4.bind("<Button-1>", lambda event: item1press(event, potilabel, items))
-    e1k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
-    e2k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
-    e3k = ImageTk.PhotoImage(Image.open('enemies/Basic imp.png').resize((100, 200))) 
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
     gamecanvas.create_window(512, 535, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
-    t2 = gamecanvas.create_window(312, 252, window=enemy2neve)
-    t3 = gamecanvas.create_window(712, 252, window=enemy3neve)
+    gamecanvas.create_window(312, 252, window=enemy2neve)
+    gamecanvas.create_window(712, 252, window=enemy3neve)
     gamecanvas.create_window(130, 715, window=item1)
     gamecanvas.create_window(386, 715, window=item2)
     gamecanvas.create_window(642, 715, window=item3)
     gamecanvas.create_window(898, 715, window=item4)
-    #gamecanvas.create_window(20, 20, window=backpackhossza)
     gamecanvas.create_window(972, 607, window=reroll)
     gamecanvas.create_window(60, 607, window=passgomb)
     gamecanvas.create_window(36, 536, window=trash)
     gamecanvas.create_window(974, 45, window=wavecounter)
     gamecanvas.create_window(970, 127, window=bosslabel)
-    if level % 5 == 0:
-        bosslabel.config(text='Boss')
-    if level % 5 != 0:
-        bosslabel.config(text='')
     gamecanvas.create_window(512, 400, window=potilabel)
     gamecanvas.create_window(20, 17, window=kilep)
-    enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level, t2, t3)
-    # time.sleep(1)
-    # level += 1
-    # wavecounter.config(text=level)
-    # enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level, t2, t3)
-    # if level % 5 == 0:
-    #     gamecanvas.itemconfig(enemy2, image = None)
-    itemgenerate(items, item1, item2, item3, item4, level)
-    # while level < 16:
-    
+    while level < 15:
+        reroll["state"] = "normal"
+        level += 1
+        wavecounter.config(text=level)
+        itemgenerate(items, item1, item2, item3, item4, level)
+        enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
+        if level % 5 == 0:
+            bosslabel.config(text='Boss')
+            gamecanvas.itemconfig(enemy2, image = None)
+            gamecanvas.itemconfig(enemy3, image = None)
+        elif level % 5 != 0:
+            bosslabel.config(text='')
+        gamecanvas.update()
+        time.sleep(2)
     ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
@@ -96,7 +91,7 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
                 while ei.rese < lvl/3:
                     ei = random.choice(ebbol) 
         listaa[i].config(text = ei.name)
-    potilabel.config(text = 'You have n rerolls in this round')
+    potilabel.config(text = 'You have no rerolls this round')
     gomb["state"] = "disabled"
 
 
@@ -136,16 +131,12 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
 #     ablak.mainloop()
 def kilepigen():
     sys.exit()
-def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl, t2, t3):
+def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl):
     mostanra = []
     for i in ebbol:
         if str(currentlvl) in i.appearsAt:
             mostanra.append(i)
     if currentlvl % 5 != 0:
-        masik = gamecanvas.create_image(312, 130)
-        harmadik = gamecanvas.create_image(712, 130)
-        t2 = gamecanvas.create_window(312, 252, window=masikneve)
-        t3 = gamecanvas.create_window(712, 252, window=harmadikneve)
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
         global ekk
@@ -163,14 +154,14 @@ def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harma
     else:
         ec = random.choice(mostanra)
         egyikneve.config(text = f'{ec.name}, {ec.hp}')
+        masikneve.config(text = '')
+        harmadikneve.config(text = '')
         global bkk
         bkk = ImageTk.PhotoImage(Image.open(f'enemies/{ec.name}.png').resize((100, 200)))
         ablak.itemconfig(egyik, image = bkk)
-        # ablak.itemconfig(masik, image = None)
-        # ablak.delete(masik)
-        # ablak.delete(harmadik)
-        # ablak.delete(t2)
-        # ablak.delete(t3)
+        ures = ImageTk.PhotoImage(Image.open(f'enemies/ures.png').resize((100, 200)))
+        ablak.itemconfig(masik, image = ures)
+        ablak.itemconfig(harmadik, image = ures)
 def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
     listaa = []
     listaa.append(item1)
