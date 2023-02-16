@@ -18,6 +18,7 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_image(512, 395, image = bbg)
     gamecanvas.pack()
     level = 0
+    global turn
     turn = 0
     item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1', name='1')
     item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2', name='2')
@@ -29,7 +30,7 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat')#, command=valamibutton)    , highlightbackground = "#000000", highlightthickness=1, bd = 0
     trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat')#, command=trashbutton) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
-    kilep = tkinter.Button(ablak, height=2, width=5, background='#ffffff', text="Exit", relief='flat')#, command=biztoshkilepszV2)
+    kilep = tkinter.Button(ablak, height=2, width=5, background='#ffffff', text="Exit", relief='flat', command = sys.exit)#, command=biztoshkilepszV2)
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
@@ -43,6 +44,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel))
     gamecanvas.create_window(512, 535, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
     gamecanvas.create_window(312, 252, window=enemy2neve)
@@ -95,19 +99,14 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
     gomb["state"] = "disabled"
 
 
-#def valamibutton():
-
-
+def valamibutton(turn):
+    turn += 1
 #def trashbutton():
 
-
-#def wavecounter():
-
-# def enemyTakingDamage():
-#     enemyHealth = Enemy.hp
-#     activeItem = 
-#     if Item.type == 'mag':
-#         enemyHealth -= Item.damage
+def itemuse(turn, clicked, selected):
+    #kéne 2 label bob hpnak meg energynek bruh
+    enemyhp = clicked.cget("text").split(', ')[1]
+    print(enemyhp)
 
 
 
