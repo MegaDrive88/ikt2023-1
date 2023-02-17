@@ -107,6 +107,14 @@ def itemuse(turn, clicked, selected):
     #kéne 2 label bob hpnak meg energynek bruh
     enemyhp = clicked.cget("text").split(', ')[1]
     print(enemyhp)
+    damage = 0
+    damagelt = enemyhp-clicked.damage
+    print(damagelt)
+def takingdmg(turn, clicked, selected):
+    enemyhp = clicked.cget("text").split(', ')[2]
+    print(enemyhp)
+
+
 
 
 
