@@ -109,8 +109,6 @@ def itemuse(turn, clicked, selected):
     print(enemyhp)
 
 
-
-
 # def biztoshkilepsz():
 #     ablak = tkinter.Tk()
 #     ablak.configure(bg='#ffffff')
@@ -181,9 +179,6 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
                     ei = random.choice(ebbol)
         listaa[i].config(text = ei.name)
     pass
-# commandok egyesével
-# global valasztott
-# valasztott = 'a'
 def item1press(event, potilabel, ebbol):
     valasztott = event.widget.cget("text")
     neve = str(event.widget).split(".")[-1]
@@ -198,10 +193,4 @@ def item1press(event, potilabel, ebbol):
                 mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage}\nPerk: {i.perk}: {i.perkValue}'
     potilabel.config(text = mittud)
     return valasztott, neve
-
-# def flipper(event):
-#     print("label text:", event.widget.cget("text"))
-# def flipper(event):
-#     print("widget name:", str(event.widget).split(".")[-1])
-def selectitem(potilabel): #ebbol, item1, item2, item3, item4, 
-    pass
+#after
