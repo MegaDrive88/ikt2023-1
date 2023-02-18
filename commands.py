@@ -105,15 +105,17 @@ def valamibutton(turn):
 
 def itemuse(turn, clicked, selected):
     #kéne 2 label bob hpnak meg energynek bruh
-    enemyhp = clicked.cget("text").split(', ')[1]
-    print(enemyhp)
-    damage = 0
-    damagelt = enemyhp-clicked.damage
-    print(damagelt)
-def takingdmg(turn, clicked, selected):
-    enemyhp = clicked.cget("text").split(', ')[2]
-    print(enemyhp)
-
+    enemy = clicked.cget("text").split(', ')
+    print(enemy[1])
+    # damage = 0
+    # damagelt = enemyhp-clicked.damage
+    # print(damagelt)
+    # clicked.config(text = f'{enemy[0]}, {(enemy[1])-selected}') ELŐSZÖR ', ', AZTÁN ' ' MENTÉN
+    
+# def takingdmg(turn, clicked, selected):
+#     enemyhp = clicked.cget("text").split(', ')[2]
+#     print(enemyhp)
+# ^ EZ MEG NEM KELL
 
 
 
