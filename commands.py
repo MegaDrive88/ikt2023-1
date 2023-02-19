@@ -62,20 +62,20 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(970, 127, window=bosslabel)
     gamecanvas.create_window(512, 400, window=potilabel)
     gamecanvas.create_window(20, 17, window=kilep)
-    while level < 15:
-        reroll["state"] = "normal"
-        level += 1
-        wavecounter.config(text=level)
-        itemgenerate(items, item1, item2, item3, item4, level)
-        enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
-        if level % 5 == 0:
-            bosslabel.config(text='Boss')
-            gamecanvas.itemconfig(enemy2, image = None)
-            gamecanvas.itemconfig(enemy3, image = None)
-        elif level % 5 != 0:
-            bosslabel.config(text='')
-        gamecanvas.update()
-        time.sleep(2)
+    # while level < 15:
+    reroll["state"] = "normal"
+    level += 1
+    wavecounter.config(text=level)
+    itemgenerate(items, item1, item2, item3, item4, level)
+    enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
+        # if level % 5 == 0:
+        #     bosslabel.config(text='Boss')
+        #     gamecanvas.itemconfig(enemy2, image = None)
+        #     gamecanvas.itemconfig(enemy3, image = None)
+        # elif level % 5 != 0:
+        #     bosslabel.config(text='')
+        # gamecanvas.update()
+        # time.sleep(2)
     ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
@@ -106,36 +106,21 @@ def valamibutton(turn):
 def itemuse(turn, clicked, selected):
     #kéne 2 label bob hpnak meg energynek bruh
     enemy = clicked.cget("text").split(', ')
-    print(enemy[1])
-    # damage = 0
-    # damagelt = enemyhp-clicked.damage
-    # print(damagelt)
-    # clicked.config(text = f'{enemy[0]}, {(enemy[1])-selected}') ELŐSZÖR ', ', AZTÁN ' ' MENTÉN
+    # print(enemy[1])
+    mikettud = selected.cget('text').split(', ')[1].split(' ')
+    if mikettud[0] ==  'Damage:':
+        clicked.config(text = f'{enemy[0]}, {int((enemy[1]))-int(mikettud[1])}')
+        #van perk? ha van, akkor x, else y
+        #kéne egy olyan függvény ami csak egy itemet generál, de azt megoldom
+    else:
+        pass
+        #defenzív item, emiatt lehet kellenek még argumentek
     
 # def takingdmg(turn, clicked, selected):
 #     enemyhp = clicked.cget("text").split(', ')[2]
 #     print(enemyhp)
 # ^ EZ MEG NEM KELL
 
-
-
-# def biztoshkilepsz():
-#     ablak = tkinter.Tk()
-#     ablak.configure(bg='#ffffff')
-#     # ablak.resizable(width=False, height=False)
-#     ablak.title("Exit")
-#     focanvas = tkinter.Canvas(ablak, height = 500, width = 500, background= '#ffffff', relief='flat')
-#     cim = tkinter.Label(ablak, text = 'Are you sure?', font = ('Fette UNZ Fraktur', 25), foreground = '#850505', background='#ffffff')
-#     igengomb = tkinter.Button(ablak, height = 1, width= 5, text='Yes', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', command=kilepigen)
-#     nemgomb = tkinter.Button(ablak, height = 1, width= 5, text='No', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505')
-
-#     focanvas.create_window(250, 100, window = cim)
-#     focanvas.create_window(166, 200, window = igengomb)
-#     focanvas.create_window(333, 200, window = nemgomb)
-
-#     focanvas.pack()
-
-#     ablak.mainloop()
 def kilepigen():
     sys.exit()
 def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl):
