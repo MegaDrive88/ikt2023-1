@@ -24,11 +24,11 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2', name='2')
     item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3', name='3')
     item4 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item4', name='4')
-    rk = Image.open('rerollkep.png').resize((60, 60))
-    rerollkep = ImageTk.PhotoImage(rk)
+    rerollkep = ImageTk.PhotoImage(Image.open('rerollkep.png').resize((60, 60)))
+    trashkep = None # ide majd a trashképet
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="__", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
     passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat')#, command=valamibutton)    , highlightbackground = "#000000", highlightthickness=1, bd = 0
-    trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat')#, command=trashbutton) 
+    trash = tkinter.Button(ablak, height=3, width=8, background='#ffffff', text="trashkep", relief='flat', command= lambda: trashbutton(potilabel, item1, item2, item3, item4, trash)) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
     kilep = tkinter.Button(ablak, height=2, width=5, background='#ffffff', text="Exit", relief='flat', command = sys.exit)#, command=biztoshkilepszV2)
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
@@ -47,7 +47,11 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel))
     gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel))
     gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel))
-    gamecanvas.create_window(512, 535, window=boblabel)
+    bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
+    bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
+    gamecanvas.create_window(512, 618, window=bobhp)
+    gamecanvas.create_window(512, 638, window=bobenergy)
+    gamecanvas.create_window(512, 530, window=boblabel)
     gamecanvas.create_window(512, 352, window=enemy1neve)
     gamecanvas.create_window(312, 252, window=enemy2neve)
     gamecanvas.create_window(712, 252, window=enemy3neve)
@@ -97,25 +101,52 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
         listaa[i].config(text = ei.name)
     potilabel.config(text = 'You have no rerolls this round')
     gomb["state"] = "disabled"
-
-
 def valamibutton(turn):
     turn += 1
-#def trashbutton():
+def trashbutton(selected, item1, item2, item3, item4, gomb):
+    pass
 
 def itemuse(turn, clicked, selected):
-    #kéne 2 label bob hpnak meg energynek bruh
-    enemy = clicked.cget("text").split(', ')
-    # print(enemy[1])
-    mikettud = selected.cget('text').split(', ')[1].split(' ')
-    if mikettud[0] ==  'Damage:':
-        clicked.config(text = f'{enemy[0]}, {int((enemy[1]))-int(mikettud[1])}')
-        #van perk? ha van, akkor x, else y
-        #kéne egy olyan függvény ami csak egy itemet generál, de azt megoldom
-    else:
-        pass
-        #defenzív item, emiatt lehet kellenek még argumentek
-    
+    if turn % 2 == 0:
+        enemy = clicked.cget("text").split(', ')
+        try:
+            mikettud = selected.cget('text').split(', ')[1].split(' ')
+        except:
+            selected.config(text = 'No item selected')
+            return None
+        if mikettud[0] ==  'Damage:':
+            clicked.config(text = f'{enemy[0]}, {int((enemy[1]))-int(mikettud[1])}')
+            try:
+                if mikettud[2] == '\nPerk:':
+                    match mikettud[5]:
+                        case 'Health:':
+                            print('hp')
+                        case 'Energy:':
+                            print('energy')
+                        case 'DMG:':
+                            print('dmg')
+                        case 'Shield:':
+                            print('shield')
+                        case _:
+                            print('something ain\'t right')
+            except:
+                pass
+                #ilyenkor fix nincs perk
+            #van perk? ha van, akkor x, else y
+            #kéne egy olyan függvény ami csak egy itemet generál, de azt megoldom
+        else:
+            pass
+            #defenzív item, emiatt lehet kellenek még argumentek
+
+def generateone(ebbol, item1, lvl): # , item2, item3, item4,
+    ei = random.choice(ebbol)
+    if ei.rese*5 - lvl*3 <= 7:
+        ei = random.choice(ebbol)
+        if ei.rese*5 - lvl*3 <= 12:
+            ei = random.choice(ebbol)
+            while ei.rese < lvl/3:
+                ei = random.choice(ebbol)
+    item1.config(text = ei.name)
 # def takingdmg(turn, clicked, selected):
 #     enemyhp = clicked.cget("text").split(', ')[2]
 #     print(enemyhp)
@@ -185,7 +216,7 @@ def item1press(event, potilabel, ebbol):
             elif i.type == ' def':
                 mittud = f'{valasztott}\nMana cost: {i.energy}, Defense: {i.defense}'
             elif i.type == ' mag':
-                mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage}\nPerk: {i.perk}: {i.perkValue}'
+                mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage} \nPerk: {i.perk}: {i.perkValue}'
     potilabel.config(text = mittud)
     return valasztott, neve
 #after
