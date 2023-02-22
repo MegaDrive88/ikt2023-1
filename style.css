@@ -23,15 +23,19 @@
 
 p{
     color: crimson;
-    padding-left: 50px;
-    margin-top: 5px;
+    padding-left: 100px;
+    margin-top: 2px;
     padding: 6px;
 }
 
 body{
+    height: 100%;
     background: "helpbg.jpg";
     background-position: center;
     background-size: cover;
-    background-repeat: no-repeat;
+    
     background: blur(10px);
 }
+
+
+
