@@ -15,10 +15,10 @@ Basic armor, def, 2, 6, 1
 Blessed armor, def, 5, 40, 4
 Cursed armor, def, 10, 45, 6
 Basic helmet, def, 2, 5, 1
-Basic Health Potion, mag, 0, 0, 25, , 2
+Basic Health Potion, mag, 0, 0, 25, Restore Health, 2
 Enhanced Health Potion, mag, 0, 0, 50, Restore Health, 4
 Basic Damage Potion, mag, 0, 0, 10, Boost DMG, 2
 Enhanced Damage Potion, mag, 0, 0, 30, Boost DMG, 4
-Special-Brew Damage Potion, mag, 0, 0, 55, Restore Health, 6
 Basic Shield Potion, mag, 0, 0, 15, Restore Shield, 2
 Enhanced Shield Potion, mag, 0, 0, 40, Restore Shield, 4
+Constant Energy Potion, mag, 0, 0, 30, Restore Energy, 2
