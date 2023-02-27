@@ -147,11 +147,9 @@ def generateone(ebbol, item1, lvl): # , item2, item3, item4,
             while ei.rese < lvl/3:
                 ei = random.choice(ebbol)
     item1.config(text = ei.name)
-# def takingdmg(turn, clicked, selected):
-#     enemyhp = clicked.cget("text").split(', ')[2]
-#     print(enemyhp)
-# ^ EZ MEG NEM KELL
-
+def enemyturn(turn, e1n, e2n, e3n, hp):
+    if turn % 2 != 0:
+        pass
 def kilepigen():
     sys.exit()
 def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl):
