@@ -44,9 +44,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
-    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel))
-    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel))
-    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel))
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy))
     bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
     bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
     gamecanvas.create_window(512, 618, window=bobhp)
@@ -103,10 +103,10 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
     gomb["state"] = "disabled"
 def valamibutton(turn):
     turn += 1
-def trashbutton(selected, item1, item2, item3, item4, gomb):
+def trashbutton(selected, item1, item2, item3, item4):
     pass
 
-def itemuse(turn, clicked, selected):
+def itemuse(turn, clicked, selected, bhp, ben):
     if turn % 2 == 0:
         enemy = clicked.cget("text").split(', ')
         try:
@@ -116,11 +116,14 @@ def itemuse(turn, clicked, selected):
             return None
         if mikettud[0] ==  'Damage:':
             clicked.config(text = f'{enemy[0]}, {int((enemy[1]))-int(mikettud[1])}')
+            if int(clicked.cget("text").split(', ')[1]) <= 0:
+                clicked.config(text = 'Dead')
             try:
                 if mikettud[2] == '\nPerk:':
                     match mikettud[5]:
                         case 'Health:':
-                            print('hp')
+                            if int(bhp.cget('text').split('-')) + int(mikettud[6]) > 120:
+                                pass
                         case 'Energy:':
                             print('energy')
                         case 'DMG:':
@@ -132,8 +135,6 @@ def itemuse(turn, clicked, selected):
             except:
                 pass
                 #ilyenkor fix nincs perk
-            #van perk? ha van, akkor x, else y
-            #kéne egy olyan függvény ami csak egy itemet generál, de azt megoldom
         else:
             pass
             #defenzív item, emiatt lehet kellenek még argumentek
