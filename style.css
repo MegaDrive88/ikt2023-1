@@ -19,6 +19,7 @@
     color: #850505;
     font-size: 50px;
     margin-bottom: 0px;
+    text-align: center;
 }
 
 p{
@@ -36,6 +37,11 @@ body{
     
     background: blur(10px);
 }
+
+.jobbra{
+    text-align: right;
+}
+
 
 
 
