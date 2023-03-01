@@ -8,7 +8,6 @@ import time
 def gamestart(bezar, enemies, items, save, ablak):
     enemyread(enemies)
     itemread(items)
-    saveread(save, 'r')
     bezar.pack_forget()
     global gamecanvas
     bg = Image.open('hatter.jpg').resize((1050, 790))
@@ -26,7 +25,7 @@ def gamestart(bezar, enemies, items, save, ablak):
     rerollkep = ImageTk.PhotoImage(Image.open('rerollkep.png').resize((60, 60)))
     trashkep = ImageTk.PhotoImage(Image.open('trashcan.png').resize((60, 60)))
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
-    passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat', command=passcommand(turn))    # highlightbackground = "#000000", highlightthickness=1, bd = 0
+    passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat', command= lambda: passcommand(turn))    # highlightbackground = "#000000", highlightthickness=1, bd = 0
     trash = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=trashkep, command= lambda: trashbutton(potilabel, item1, item2, item3, item4, trash)) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
     kilep = tkinter.Button(ablak, height=2, width=5, background='#ffffff', text="Exit", relief='flat', command = sys.exit)#, command=biztoshkilepszV2)
@@ -161,8 +160,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl):
             pass
             #defenzív item, emiatt lehet kellenek még argumentek
         selected.config(text = '')
-
-
+        #item1 ,2, 3, 4stb
 def generateone(ebbol, item1, lvl): # , item2, item3, item4,
     ei = random.choice(ebbol)
     if ei.rese*5 - lvl*3 <= 7:
