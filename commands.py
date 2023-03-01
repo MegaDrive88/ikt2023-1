@@ -5,11 +5,10 @@ from PIL import Image, ImageTk
 from events import *
 import random
 import time
-def gamestart(bezar, enemies, items, inventory, save, ablak):
+def gamestart(bezar, enemies, items, save, ablak):
     enemyread(enemies)
     itemread(items)
     saveread(save, 'r')
-    #invread(inventory, 'a')
     bezar.pack_forget()
     global gamecanvas
     bg = Image.open('hatter.jpg').resize((1050, 790))
@@ -20,7 +19,6 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     level = 0
     global turn
     turn = 0
-    mult = 0
     item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1', name='1')
     item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2', name='2')
     item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3', name='3')
@@ -45,9 +43,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
-    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, mult))
-    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, mult))
-    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, mult))
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level))
     bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
     bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
     gamecanvas.create_window(512, 618, window=bobhp)
@@ -81,6 +79,12 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
         #     bosslabel.config(text='')
         # gamecanvas.update()
         # time.sleep(2)
+    saveread(save, 'r')
+    if level == save[0].split(';')[1]:
+        rest = f'{level};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
+        fajl = open('save.txt', 'w', encoding='utf-8')
+        fajl.write(f'{0};{rest}')
+        fajl.close()
     ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
@@ -108,7 +112,9 @@ def passcommand(turn):
 def trashbutton(selected, item1, item2, item3, item4, gomb):
     pass
 
-def itemuse(turn, clicked, selected, bhp, ben, mult):
+def itemuse(turn, clicked, selected, bhp, ben, save, lvl):
+    saveread(save, 'r')
+    mult = int(save[0].split(';')[0])
     if turn % 2 == 0:
         enemy = clicked.cget("text").split(', ')
         try:
@@ -117,10 +123,7 @@ def itemuse(turn, clicked, selected, bhp, ben, mult):
             selected.config(text = 'No item selected')
             return None
         if mikettud[0] ==  'Damage:':
-            # try:
             clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
-            # except:
-            #     clicked.config(text = f'{enemy[0]}, {int(enemy[1])-int(mikettud[1])}')
             if int(float(clicked.cget("text").split(', ')[1])) <= 0:
                 clicked.config(text = 'Dead')
             try:
@@ -146,7 +149,10 @@ def itemuse(turn, clicked, selected, bhp, ben, mult):
                                 ben.config(text = f'Energy-{enbar}-{elozoen + int(mikettud[6])}')
                         case 'DMG:':
                             mult = int(mikettud[6])
-                            pass
+                            rest = f'{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
+                            fajl = open('save.txt', 'w', encoding='utf-8')
+                            fajl.write(f'{mult};{lvl+2};{rest}')
+                            fajl.close()
                         case _:
                             print('something ain\'t right')
             except:
@@ -154,8 +160,9 @@ def itemuse(turn, clicked, selected, bhp, ben, mult):
         else:
             pass
             #defenzív item, emiatt lehet kellenek még argumentek
-# def getmult(szam):
-#     return szam
+        selected.config(text = '')
+
+
 def generateone(ebbol, item1, lvl): # , item2, item3, item4,
     ei = random.choice(ebbol)
     if ei.rese*5 - lvl*3 <= 7:
