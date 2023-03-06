@@ -25,7 +25,7 @@ def gamestart(bezar, enemies, items, save, ablak):
     rerollkep = ImageTk.PhotoImage(Image.open('rerollkep.png').resize((60, 60)))
     trashkep = ImageTk.PhotoImage(Image.open('trashcan.png').resize((60, 60)))
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
-    passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat', command= lambda: passcommand(turn))    # highlightbackground = "#000000", highlightthickness=1, bd = 0
+    # passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat', command= lambda: passcommand(turn))    # highlightbackground = "#000000", highlightthickness=1, bd = 0
     trash = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=trashkep, command= lambda: trashbutton(potilabel, item1, item2, item3, item4, trash)) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
     kilep = tkinter.Button(ablak, height=2, width=5, background='#ffffff', text="Exit", relief='flat', command = sys.exit)#, command=biztoshkilepszV2)
@@ -58,8 +58,8 @@ def gamestart(bezar, enemies, items, save, ablak):
     gamecanvas.create_window(642, 715, window=item3)
     gamecanvas.create_window(898, 715, window=item4)
     gamecanvas.create_window(972, 607, window=reroll)
-    gamecanvas.create_window(60, 607, window=passgomb)
-    gamecanvas.create_window(55, 520, window=trash)
+    # gamecanvas.create_window(60, 607, window=passgomb)
+    gamecanvas.create_window(55, 607, window=trash)
     gamecanvas.create_window(974, 45, window=wavecounter)
     gamecanvas.create_window(970, 127, window=bosslabel)
     gamecanvas.create_window(512, 400, window=potilabel)
@@ -105,9 +105,9 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
         listaa[i].config(text = ei.name)
     potilabel.config(text = 'You have no rerolls this round')
     gomb["state"] = "disabled"
-def passcommand(turn):
-    if turn % 2 == 0:
-        turn += 1
+# def passcommand(turn):
+#     if turn % 2 == 0:
+#         turn += 1
 def trashbutton(selected, item1, item2, item3, item4, gomb):
     pass
 
@@ -156,9 +156,6 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl):
                             print('something ain\'t right')
             except:
                 pass
-        else:
-            pass
-            #defenzív item, emiatt lehet kellenek még argumentek
         selected.config(text = '')
         #item1 ,2, 3, 4stb
 def generateone(ebbol, item1, lvl): # , item2, item3, item4,
@@ -241,3 +238,11 @@ def item1press(event, potilabel, ebbol):
     potilabel.config(text = mittud)
     return valasztott, neve
 #after
+# Basic shield, def, 2, 5, 1
+# Hardened round shield, def, 5, 10, 2
+# Blessed shield, def, 5, 20, 2
+# Thicc af shield, def, 8, 35, 4
+# Basic armor, def, 2, 6, 1
+# Blessed armor, def, 5, 40, 4
+# Cursed armor, def, 10, 45, 6
+# Basic helmet, def, 2, 5, 1
