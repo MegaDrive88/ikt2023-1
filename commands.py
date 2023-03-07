@@ -5,6 +5,8 @@ from PIL import Image, ImageTk
 from events import *
 import random
 import time
+import re
+
 def gamestart(bezar, enemies, items, save, ablak):
     enemyread(enemies)
     itemread(items)
@@ -42,9 +44,9 @@ def gamestart(bezar, enemies, items, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
-    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level))
-    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level))
-    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level))
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
     bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
     bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
     gamecanvas.create_window(512, 618, window=bobhp)
@@ -111,7 +113,8 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
 def trashbutton(selected, item1, item2, item3, item4, gomb):
     pass
 
-def itemuse(turn, clicked, selected, bhp, ben, save, lvl):
+def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes):
+    items = [item1, item2, item3, item4]
     saveread(save, 'r')
     mult = int(save[0].split(';')[0])
     if turn % 2 == 0:
@@ -156,8 +159,10 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl):
                             print('something ain\'t right')
             except:
                 pass
+        for i in range(0, len(items)):
+            if items[i].cget('text') == selected.cget('text').split('\n')[0]:
+                generateone(osszes, items[i], lvl)
         selected.config(text = '')
-        #item1 ,2, 3, 4stb
 def generateone(ebbol, item1, lvl): # , item2, item3, item4,
     ei = random.choice(ebbol)
     if ei.rese*5 - lvl*3 <= 7:
@@ -204,11 +209,7 @@ def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harma
         ablak.itemconfig(masik, image = ures)
         ablak.itemconfig(harmadik, image = ures)
 def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
-    listaa = []
-    listaa.append(item1)
-    listaa.append(item2)
-    listaa.append(item3)
-    listaa.append(item4)
+    listaa = [item1, item2, item3, item4]
     # var_holder = {}
     # for i in range(5):
     #     var_holder['item' + str(i)] = "iterationNumber=="+str(i)
@@ -222,7 +223,15 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
                 while ei.rese < lvl/3:
                     ei = random.choice(ebbol)
         listaa[i].config(text = ei.name)
-    pass
+    x = []
+    for i in listaa:
+        if re.search('*Potion', i.cget('text')):
+            x.append(i)
+            # try ?????
+    if len(x) >= 3:
+        while re.search('*Potion$', x[0].cget('text')):
+            generateone(ebbol, x[0], lvl)
+
 def item1press(event, potilabel, ebbol):
     valasztott = event.widget.cget("text")
     neve = str(event.widget).split(".")[-1]
