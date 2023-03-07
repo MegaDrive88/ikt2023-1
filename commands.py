@@ -5,7 +5,6 @@ from PIL import Image, ImageTk
 from events import *
 import random
 import time
-import re
 
 def gamestart(bezar, enemies, items, save, ablak):
     enemyread(enemies)
@@ -66,26 +65,31 @@ def gamestart(bezar, enemies, items, save, ablak):
     gamecanvas.create_window(970, 127, window=bosslabel)
     gamecanvas.create_window(512, 400, window=potilabel)
     gamecanvas.create_window(20, 17, window=kilep)
-    # while level < 15:
-    reroll["state"] = "normal"
-    level += 1
-    wavecounter.config(text=level)
-    itemgenerate(items, item1, item2, item3, item4, level)
-    enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
-        # if level % 5 == 0:
-        #     bosslabel.config(text='Boss')
-        #     gamecanvas.itemconfig(enemy2, image = None)
-        #     gamecanvas.itemconfig(enemy3, image = None)
-        # elif level % 5 != 0:
-        #     bosslabel.config(text='')
-        # gamecanvas.update()
-        # time.sleep(2)
-    saveread(save, 'r')
-    if level == save[0].split(';')[1]:
-        rest = f'{level};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
-        fajl = open('save.txt', 'w', encoding='utf-8')
-        fajl.write(f'{0};{rest}')
-        fajl.close()
+    while level < 15:
+        reroll["state"] = "normal"
+        level += 1
+        wavecounter.config(text=level)
+        itemgenerate(items, item1, item2, item3, item4, level)
+        enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
+        if level % 5 == 0:
+            bosslabel.config(text='Boss')
+            gamecanvas.itemconfig(enemy2, image = None)
+            gamecanvas.itemconfig(enemy3, image = None)
+        else:
+            bosslabel.config(text='')
+        saveread(save, 'r')
+        if level == save[0].split(';')[1]:
+            rest = f'{level};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
+            fajl = open('save.txt', 'w', encoding='utf-8')
+            fajl.write(f'{0};{rest}')
+            fajl.close()
+        gamecanvas.update()
+        while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
+            if turn % 2 == 0:
+                vár(gamecanvas, 0.6)
+            else:
+                # enemyturn()
+                pass
     ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
@@ -128,6 +132,12 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
             clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
             if int(float(clicked.cget("text").split(', ')[1])) <= 0:
                 clicked.config(text = 'Dead')
+            enbar = ''
+            minusz = int(selected.cget('text').split(', ')[0].split(':')[1])
+            elozoen = int(ben.cget('text').split('-')[2])
+            for i in range(0, int(round((int(elozoen) - int(minusz))/10, 0))):
+                enbar += '█'
+            ben.config(text = f'Energy-{enbar}-{elozoen - int(minusz)}')
             try:
                 if mikettud[2] == '\nPerk:':
                     match mikettud[5]:
@@ -225,11 +235,10 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
         listaa[i].config(text = ei.name)
     x = []
     for i in listaa:
-        if re.search('*Potion', i.cget('text')):
+        if 'Potion' in i.cget('text'):
             x.append(i)
-            # try ?????
-    if len(x) >= 3:
-        while re.search('*Potion$', x[0].cget('text')):
+    if len(x) == 4:
+        while 'Potion' in i.cget('text'):
             generateone(ebbol, x[0], lvl)
 
 def item1press(event, potilabel, ebbol):
@@ -246,6 +255,9 @@ def item1press(event, potilabel, ebbol):
                 mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage} \nPerk: {i.perk}: {i.perkValue}'
     potilabel.config(text = mittud)
     return valasztott, neve
+def vár(root, time):
+        root.after(int(time*1000), root.quit)
+        root.mainloop()
 #after
 # Basic shield, def, 2, 5, 1
 # Hardened round shield, def, 5, 10, 2
