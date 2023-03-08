@@ -7,6 +7,8 @@ import random
 import time
 
 def gamestart(bezar, enemies, items, save, ablak):
+    global buttonClicked
+    buttonClicked = False
     enemyread(enemies)
     itemread(items)
     bezar.pack_forget()
@@ -43,9 +45,9 @@ def gamestart(bezar, enemies, items, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
-    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
-    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
-    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
     bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
     bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
     gamecanvas.create_window(512, 618, window=bobhp)
@@ -86,10 +88,19 @@ def gamestart(bezar, enemies, items, save, ablak):
         gamecanvas.update()
         while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
             if turn % 2 == 0:
+                if bobenergy.cget('text').split('-')[2] == '0':
+                    break
                 vár(gamecanvas, 0.6)
-            else:
-                # enemyturn()
+                if buttonClicked:
+                    turn += 1
+            else: #VMIÉR NEM FUT LE
+                buttonClicked = False
+                enemyturn(turn, enemy1neve, enemy2neve, enemy3neve, bobhp, enemies, level)
+                turn += 1
                 pass
+        if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0':
+            print('you lose')
+            break
     ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
@@ -117,7 +128,7 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
 def trashbutton(selected, item1, item2, item3, item4, gomb):
     pass
 
-def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes):
+def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes, buttonClicked):
     items = [item1, item2, item3, item4]
     saveread(save, 'r')
     mult = int(save[0].split(';')[0])
@@ -129,15 +140,20 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
             selected.config(text = 'No item selected')
             return None
         if mikettud[0] ==  'Damage:':
-            clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
-            if int(float(clicked.cget("text").split(', ')[1])) <= 0:
-                clicked.config(text = 'Dead')
+            if clicked.cget('text') != 'Dead':
+                clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
+                if int(float(clicked.cget("text").split(', ')[1])) <= 0:
+                    clicked.config(text = 'Dead')
             enbar = ''
             minusz = int(selected.cget('text').split(', ')[0].split(':')[1])
-            elozoen = int(ben.cget('text').split('-')[2])
-            for i in range(0, int(round((int(elozoen) - int(minusz))/10, 0))):
-                enbar += '█'
-            ben.config(text = f'Energy-{enbar}-{elozoen - int(minusz)}')
+            elozoen = ben.cget('text').split('-')[2]
+            if elozoen != '-':
+                for i in range(0, int(round((int(elozoen) - int(minusz))/10, 0))):
+                    enbar += '█'
+            if int(elozoen) - int(minusz) <= 0:
+                ben.config(text = f'Energy-{enbar}-0')
+            else:
+                ben.config(text = f'Energy-{enbar}-{int(elozoen) - int(minusz)}')
             try:
                 if mikettud[2] == '\nPerk:':
                     match mikettud[5]:
@@ -173,6 +189,8 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
             if items[i].cget('text') == selected.cget('text').split('\n')[0]:
                 generateone(osszes, items[i], lvl)
         selected.config(text = '')
+        buttonClicked = not buttonClicked
+        # turn += 1
 def generateone(ebbol, item1, lvl): # , item2, item3, item4,
     ei = random.choice(ebbol)
     if ei.rese*5 - lvl*3 <= 7:
@@ -182,9 +200,18 @@ def generateone(ebbol, item1, lvl): # , item2, item3, item4,
             while ei.rese < lvl/3:
                 ei = random.choice(ebbol)
     item1.config(text = ei.name)
-def enemyturn(turn, e1n, e2n, e3n, hp):
-    if turn % 2 != 0:
-        pass
+def enemyturn(turn, e1n, e2n, e3n, bhp, osszes, lvl):
+    if lvl % 5 != 0:
+        enemyk = [e1n, e2n, e3n]
+        ez = None
+        if turn % 2 != 0:
+            melyik = random.randint(0, 2)
+            for i in osszes:
+                if enemyk[melyik].cget('text').split(', ')[0] == i.name:
+                    ez = i
+                    break
+        bhp.config(text='halal')
+                
 def kilepigen():
     sys.exit()
 def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl):
@@ -258,6 +285,8 @@ def item1press(event, potilabel, ebbol):
 def vár(root, time):
         root.after(int(time*1000), root.quit)
         root.mainloop()
+# def detect(buttonClicked):
+#     buttonClicked = not buttonClicked
 #after
 # Basic shield, def, 2, 5, 1
 # Hardened round shield, def, 5, 10, 2
