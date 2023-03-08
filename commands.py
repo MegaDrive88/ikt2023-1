@@ -5,11 +5,12 @@ from PIL import Image, ImageTk
 from events import *
 import random
 import time
-def gamestart(bezar, enemies, items, inventory, save, ablak):
+
+def gamestart(bezar, enemies, items, save, ablak):
+    global buttonClicked
+    buttonClicked = False
     enemyread(enemies)
     itemread(items)
-    saveread(save, 'r')
-    #invread(inventory, 'a')
     bezar.pack_forget()
     global gamecanvas
     bg = Image.open('hatter.jpg').resize((1050, 790))
@@ -20,7 +21,6 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     level = 0
     global turn
     turn = 0
-    mult = 0
     item1 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item1', name='1')
     item2 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item2', name='2')
     item3 = tkinter.Button(ablak, height=8, width=35, relief='ridge', background= '#ffffff', text='item3', name='3')
@@ -28,7 +28,7 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     rerollkep = ImageTk.PhotoImage(Image.open('rerollkep.png').resize((60, 60)))
     trashkep = ImageTk.PhotoImage(Image.open('trashcan.png').resize((60, 60)))
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
-    passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat', command=passcommand(turn))    # highlightbackground = "#000000", highlightthickness=1, bd = 0
+    # passgomb = tkinter.Button(ablak, height=5, width=15, background='#ffffff', text="valamikep", relief='flat', command= lambda: passcommand(turn))    # highlightbackground = "#000000", highlightthickness=1, bd = 0
     trash = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=trashkep, command= lambda: trashbutton(potilabel, item1, item2, item3, item4, trash)) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
     kilep = tkinter.Button(ablak, height=2, width=5, background='#ffffff', text="Exit", relief='flat', command = sys.exit)#, command=biztoshkilepszV2)
@@ -45,9 +45,9 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
-    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, mult))
-    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, mult))
-    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, mult))
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
     bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
     bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
     gamecanvas.create_window(512, 618, window=bobhp)
@@ -61,26 +61,46 @@ def gamestart(bezar, enemies, items, inventory, save, ablak):
     gamecanvas.create_window(642, 715, window=item3)
     gamecanvas.create_window(898, 715, window=item4)
     gamecanvas.create_window(972, 607, window=reroll)
-    gamecanvas.create_window(60, 607, window=passgomb)
-    gamecanvas.create_window(55, 520, window=trash)
+    # gamecanvas.create_window(60, 607, window=passgomb)
+    gamecanvas.create_window(55, 607, window=trash)
     gamecanvas.create_window(974, 45, window=wavecounter)
     gamecanvas.create_window(970, 127, window=bosslabel)
     gamecanvas.create_window(512, 400, window=potilabel)
     gamecanvas.create_window(20, 17, window=kilep)
-    # while level < 15:
-    reroll["state"] = "normal"
-    level += 1
-    wavecounter.config(text=level)
-    itemgenerate(items, item1, item2, item3, item4, level)
-    enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
-        # if level % 5 == 0:
-        #     bosslabel.config(text='Boss')
-        #     gamecanvas.itemconfig(enemy2, image = None)
-        #     gamecanvas.itemconfig(enemy3, image = None)
-        # elif level % 5 != 0:
-        #     bosslabel.config(text='')
-        # gamecanvas.update()
-        # time.sleep(2)
+    while level < 15:
+        reroll["state"] = "normal"
+        level += 1
+        wavecounter.config(text=level)
+        itemgenerate(items, item1, item2, item3, item4, level)
+        enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
+        if level % 5 == 0:
+            bosslabel.config(text='Boss')
+            gamecanvas.itemconfig(enemy2, image = None)
+            gamecanvas.itemconfig(enemy3, image = None)
+        else:
+            bosslabel.config(text='')
+        saveread(save, 'r')
+        if level == save[0].split(';')[1]:
+            rest = f'{level};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
+            fajl = open('save.txt', 'w', encoding='utf-8')
+            fajl.write(f'{0};{rest}')
+            fajl.close()
+        gamecanvas.update()
+        while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
+            if turn % 2 == 0:
+                if bobenergy.cget('text').split('-')[2] == '0':
+                    break
+                vár(gamecanvas, 0.6)
+                if buttonClicked:
+                    turn += 1
+            else: #VMIÉR NEM FUT LE
+                buttonClicked = False
+                enemyturn(turn, enemy1neve, enemy2neve, enemy3neve, bobhp, enemies, level)
+                turn += 1
+                pass
+        if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0':
+            print('you lose')
+            break
     ablak.mainloop()
 def segitseg():
     webbrowser.open_new(r"help.html")
@@ -102,13 +122,16 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
         listaa[i].config(text = ei.name)
     potilabel.config(text = 'You have no rerolls this round')
     gomb["state"] = "disabled"
-def passcommand(turn):
-    if turn % 2 == 0:
-        turn += 1
+# def passcommand(turn):
+#     if turn % 2 == 0:
+#         turn += 1
 def trashbutton(selected, item1, item2, item3, item4, gomb):
     pass
 
-def itemuse(turn, clicked, selected, bhp, ben, mult):
+def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes, buttonClicked):
+    items = [item1, item2, item3, item4]
+    saveread(save, 'r')
+    mult = int(save[0].split(';')[0])
     if turn % 2 == 0:
         enemy = clicked.cget("text").split(', ')
         try:
@@ -117,12 +140,20 @@ def itemuse(turn, clicked, selected, bhp, ben, mult):
             selected.config(text = 'No item selected')
             return None
         if mikettud[0] ==  'Damage:':
-            # try:
-            clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
-            # except:
-            #     clicked.config(text = f'{enemy[0]}, {int(enemy[1])-int(mikettud[1])}')
-            if int(float(clicked.cget("text").split(', ')[1])) <= 0:
-                clicked.config(text = 'Dead')
+            if clicked.cget('text') != 'Dead':
+                clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
+                if int(float(clicked.cget("text").split(', ')[1])) <= 0:
+                    clicked.config(text = 'Dead')
+            enbar = ''
+            minusz = int(selected.cget('text').split(', ')[0].split(':')[1])
+            elozoen = ben.cget('text').split('-')[2]
+            if elozoen != '-':
+                for i in range(0, int(round((int(elozoen) - int(minusz))/10, 0))):
+                    enbar += '█'
+            if int(elozoen) - int(minusz) <= 0:
+                ben.config(text = f'Energy-{enbar}-0')
+            else:
+                ben.config(text = f'Energy-{enbar}-{int(elozoen) - int(minusz)}')
             try:
                 if mikettud[2] == '\nPerk:':
                     match mikettud[5]:
@@ -146,16 +177,20 @@ def itemuse(turn, clicked, selected, bhp, ben, mult):
                                 ben.config(text = f'Energy-{enbar}-{elozoen + int(mikettud[6])}')
                         case 'DMG:':
                             mult = int(mikettud[6])
-                            pass
+                            rest = f'{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
+                            fajl = open('save.txt', 'w', encoding='utf-8')
+                            fajl.write(f'{mult};{lvl+2};{rest}')
+                            fajl.close()
                         case _:
                             print('something ain\'t right')
             except:
                 pass
-        else:
-            pass
-            #defenzív item, emiatt lehet kellenek még argumentek
-# def getmult(szam):
-#     return szam
+        for i in range(0, len(items)):
+            if items[i].cget('text') == selected.cget('text').split('\n')[0]:
+                generateone(osszes, items[i], lvl)
+        selected.config(text = '')
+        buttonClicked = not buttonClicked
+        # turn += 1
 def generateone(ebbol, item1, lvl): # , item2, item3, item4,
     ei = random.choice(ebbol)
     if ei.rese*5 - lvl*3 <= 7:
@@ -165,9 +200,18 @@ def generateone(ebbol, item1, lvl): # , item2, item3, item4,
             while ei.rese < lvl/3:
                 ei = random.choice(ebbol)
     item1.config(text = ei.name)
-def enemyturn(turn, e1n, e2n, e3n, hp):
-    if turn % 2 != 0:
-        pass
+def enemyturn(turn, e1n, e2n, e3n, bhp, osszes, lvl):
+    if lvl % 5 != 0:
+        enemyk = [e1n, e2n, e3n]
+        ez = None
+        if turn % 2 != 0:
+            melyik = random.randint(0, 2)
+            for i in osszes:
+                if enemyk[melyik].cget('text').split(', ')[0] == i.name:
+                    ez = i
+                    break
+        bhp.config(text='halal')
+                
 def kilepigen():
     sys.exit()
 def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harmadikneve, currentlvl):
@@ -202,11 +246,7 @@ def enemyspawn(ablak, ebbol, egyik, masik, harmadik, egyikneve, masikneve, harma
         ablak.itemconfig(masik, image = ures)
         ablak.itemconfig(harmadik, image = ures)
 def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
-    listaa = []
-    listaa.append(item1)
-    listaa.append(item2)
-    listaa.append(item3)
-    listaa.append(item4)
+    listaa = [item1, item2, item3, item4]
     # var_holder = {}
     # for i in range(5):
     #     var_holder['item' + str(i)] = "iterationNumber=="+str(i)
@@ -220,7 +260,14 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
                 while ei.rese < lvl/3:
                     ei = random.choice(ebbol)
         listaa[i].config(text = ei.name)
-    pass
+    x = []
+    for i in listaa:
+        if 'Potion' in i.cget('text'):
+            x.append(i)
+    if len(x) == 4:
+        while 'Potion' in i.cget('text'):
+            generateone(ebbol, x[0], lvl)
+
 def item1press(event, potilabel, ebbol):
     valasztott = event.widget.cget("text")
     neve = str(event.widget).split(".")[-1]
@@ -235,4 +282,17 @@ def item1press(event, potilabel, ebbol):
                 mittud = f'{valasztott}\nMana cost: {i.energy}, Damage: {i.damage} \nPerk: {i.perk}: {i.perkValue}'
     potilabel.config(text = mittud)
     return valasztott, neve
+def vár(root, time):
+        root.after(int(time*1000), root.quit)
+        root.mainloop()
+# def detect(buttonClicked):
+#     buttonClicked = not buttonClicked
 #after
+# Basic shield, def, 2, 5, 1
+# Hardened round shield, def, 5, 10, 2
+# Blessed shield, def, 5, 20, 2
+# Thicc af shield, def, 8, 35, 4
+# Basic armor, def, 2, 6, 1
+# Blessed armor, def, 5, 40, 4
+# Cursed armor, def, 10, 45, 6
+# Basic helmet, def, 2, 5, 1
