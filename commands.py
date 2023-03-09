@@ -7,8 +7,7 @@ import random
 import time
 
 def gamestart(bezar, enemies, items, save, ablak):
-    global buttonClicked
-    buttonClicked = False
+    time.sleep(1)
     enemyread(enemies)
     itemread(items)
     bezar.pack_forget()
@@ -45,9 +44,9 @@ def gamestart(bezar, enemies, items, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
-    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
-    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
-    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, buttonClicked))
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
     bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
     bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
     gamecanvas.create_window(512, 618, window=bobhp)
@@ -80,28 +79,27 @@ def gamestart(bezar, enemies, items, save, ablak):
         else:
             bosslabel.config(text='')
         saveread(save, 'r')
-        if level == save[0].split(';')[1]:
-            rest = f'{level};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
+        if level == save[-1].split(';')[1]:
+            rest = f'{level};{turn};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[4]}'
             fajl = open('save.txt', 'w', encoding='utf-8')
             fajl.write(f'{0};{rest}')
             fajl.close()
         gamecanvas.update()
         while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
+            saveread(save, 'r')
+            turn = int(save[-1].split(';')[2])
             if turn % 2 == 0:
                 if bobenergy.cget('text').split('-')[2] == '0':
                     break
                 vár(gamecanvas, 0.6)
-                if buttonClicked:
-                    turn += 1
-            else: #VMIÉR NEM FUT LE
-                buttonClicked = False
-                enemyturn(turn, enemy1neve, enemy2neve, enemy3neve, bobhp, enemies, level)
-                turn += 1
+            else:
+                enemyturn(save, turn, enemy1neve, enemy2neve, enemy3neve, bobhp, enemies, level)
                 pass
         if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0':
             print('you lose')
-            break
+            break # break helyett írás
     ablak.mainloop()
+
 def segitseg():
     webbrowser.open_new(r"help.html")
 
@@ -122,13 +120,11 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
         listaa[i].config(text = ei.name)
     potilabel.config(text = 'You have no rerolls this round')
     gomb["state"] = "disabled"
-# def passcommand(turn):
-#     if turn % 2 == 0:
-#         turn += 1
+
 def trashbutton(selected, item1, item2, item3, item4, gomb):
     pass
 
-def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes, buttonClicked):
+def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes):
     items = [item1, item2, item3, item4]
     saveread(save, 'r')
     mult = int(save[0].split(';')[0])
@@ -177,7 +173,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                                 ben.config(text = f'Energy-{enbar}-{elozoen + int(mikettud[6])}')
                         case 'DMG:':
                             mult = int(mikettud[6])
-                            rest = f'{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[3]}'
+                            rest = f'{turn};{"True" if save[-1].split(";")[2] == True else "False"};{save[-1].split(";")[4]}'
                             fajl = open('save.txt', 'w', encoding='utf-8')
                             fajl.write(f'{mult};{lvl+2};{rest}')
                             fajl.close()
@@ -189,8 +185,12 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
             if items[i].cget('text') == selected.cget('text').split('\n')[0]:
                 generateone(osszes, items[i], lvl)
         selected.config(text = '')
-        buttonClicked = not buttonClicked
-        # turn += 1
+        turn += 1
+        fajl = open('save.txt', 'w', encoding='utf-8')
+        rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[0].split(";")[2] == True else "False"};{save[-1].split(";")[4]}']
+        fajl.write(f'{rest[0]};{turn};{rest[1]}')
+        fajl.close()
+        # buttonClicked = not buttonClicked
 def generateone(ebbol, item1, lvl): # , item2, item3, item4,
     ei = random.choice(ebbol)
     if ei.rese*5 - lvl*3 <= 7:
@@ -200,17 +200,28 @@ def generateone(ebbol, item1, lvl): # , item2, item3, item4,
             while ei.rese < lvl/3:
                 ei = random.choice(ebbol)
     item1.config(text = ei.name)
-def enemyturn(turn, e1n, e2n, e3n, bhp, osszes, lvl):
+def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
     if lvl % 5 != 0:
         enemyk = [e1n, e2n, e3n]
-        ez = None
+        ez = 15
         if turn % 2 != 0:
             melyik = random.randint(0, 2)
             for i in osszes:
                 if enemyk[melyik].cget('text').split(', ')[0] == i.name:
-                    ez = i
+                    ez = i.dam
                     break
-        bhp.config(text='halal')
+            hpbar = ''
+            time.sleep(1)
+            elozohp = int(bhp.cget('text').split('-')[2])
+            for i in range(0, int(round((int(elozohp) - int(ez))/12, 0))):
+                hpbar += '█'
+            bhp.config(text = f'Health-{hpbar}-{int(elozohp)-int(ez)}')
+            turn = int(save[-1].split(";")[2])
+            turn += 1
+            fajl = open('save.txt', 'w', encoding='utf-8')
+            rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[0].split(";")[2] == True else "False"};{save[-1].split(";")[4]}']
+            fajl.write(f'{rest[0]};{turn};{rest[1]}')
+            fajl.close()
                 
 def kilepigen():
     sys.exit()
