@@ -48,7 +48,7 @@ def gamestart(bezar, enemies, items, save, ablak):
     gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
     gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
     bobhp = tkinter.Label(ablak, text = 'Health-████████████-120', foreground='#06b82f')
-    bobenergy = tkinter.Label(ablak, text='Energy-██████████-100', foreground='#03b7f5')
+    bobenergy = tkinter.Label(ablak, text='Energy-████████████-120', foreground='#03b7f5')
     gamecanvas.create_window(512, 618, window=bobhp)
     gamecanvas.create_window(512, 638, window=bobenergy)
     gamecanvas.create_window(512, 530, window=boblabel)
@@ -68,7 +68,7 @@ def gamestart(bezar, enemies, items, save, ablak):
     gamecanvas.create_window(20, 17, window=kilep)
     while level < 15:
         reroll["state"] = "normal"
-        level += 1
+        level += 1 # case energyt ide másolni
         wavecounter.config(text=level)
         itemgenerate(items, item1, item2, item3, item4, level)
         enemyspawn(gamecanvas, enemies, enemy1, enemy2, enemy3, enemy1neve, enemy2neve, enemy3neve, level)
@@ -89,7 +89,7 @@ def gamestart(bezar, enemies, items, save, ablak):
             saveread(save, 'r')
             turn = int(save[-1].split(';')[2])
             if turn % 2 == 0:
-                if bobenergy.cget('text').split('-')[2] == '0':
+                if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0':
                     break
                 vár(gamecanvas, 0.6)
             else:
@@ -163,12 +163,12 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                                     hpbar += '█'
                                 bhp.config(text = f'Health-{hpbar}-{elozohp + int(mikettud[6])}')
                         case 'Energy:':
-                            if int(ben.cget('text').split('-')[2]) + int(mikettud[6]) >= 100:
-                                ben.config(text = 'Energy-██████████-100')
+                            if int(ben.cget('text').split('-')[2]) + int(mikettud[6]) >= 120:
+                                ben.config(text = 'Energy-████████████-120')
                             else:
                                 enbar = ''
                                 elozoen = int(ben.cget('text').split('-')[2])
-                                for i in range(0, int(round((int(elozoen) + int(mikettud[6]))/10, 0))):
+                                for i in range(0, int(round((int(elozoen) + int(mikettud[6]))/12, 0))):
                                     enbar += '█'
                                 ben.config(text = f'Energy-{enbar}-{elozoen + int(mikettud[6])}')
                         case 'DMG:':
