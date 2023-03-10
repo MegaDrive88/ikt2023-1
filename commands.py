@@ -79,16 +79,16 @@ def gamestart(bezar, enemies, items, save, ablak):
         else:
             bosslabel.config(text='')
         saveread(save, 'r')
-        if level == save[-1].split(';')[1]:
-            rest = f'{level};{turn};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[4]}'
-            fajl = open('save.txt', 'w', encoding='utf-8')
-            fajl.write(f'{0};{rest}')
-            fajl.close()
         gamecanvas.update()
         while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
             saveread(save, 'r')
             turn = int(save[-1].split(';')[2])
             if turn % 2 == 0:
+                if level == save[-1].split(';')[1]:
+                    rest = f'{level};{turn};{"True" if save[0].split(";")[2] == True else "False"};{save[0].split(";")[4]}'
+                    fajl = open('save.txt', 'w', encoding='utf-8')
+                    fajl.write(f'{0};{rest}')
+                    fajl.close()
                 if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0':
                     break
                 vár(gamecanvas, 0.6)
@@ -127,6 +127,7 @@ def trashbutton(selected, item1, item2, item3, item4, gomb):
 def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes):
     items = [item1, item2, item3, item4]
     saveread(save, 'r')
+    global mult
     mult = int(save[0].split(';')[0])
     if turn % 2 == 0:
         enemy = clicked.cget("text").split(', ')
@@ -175,7 +176,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                             mult = int(mikettud[6])
                             rest = f'{turn};{"True" if save[-1].split(";")[2] == True else "False"};{save[-1].split(";")[4]}'
                             fajl = open('save.txt', 'w', encoding='utf-8')
-                            fajl.write(f'{mult};{lvl+2};{rest}')
+                            fajl.write(f'{mult};{lvl+1};{rest}')
                             fajl.close()
                         case _:
                             print('something ain\'t right')
@@ -186,6 +187,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                 generateone(osszes, items[i], lvl)
         selected.config(text = '')
         turn += 1
+        saveread(save, 'r')
         fajl = open('save.txt', 'w', encoding='utf-8')
         rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[0].split(";")[2] == True else "False"};{save[-1].split(";")[4]}']
         fajl.write(f'{rest[0]};{turn};{rest[1]}')
