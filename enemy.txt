@@ -18,4 +18,4 @@ Mericarol;100;40;11-12;0
 Ex-Thief;80;50;13-14;0
 Ex-Liar;100;30;12-13;0
 The Nameless;90;35;11-14;0
-Gabriel himself, AKA the Final boss;150;45;15;1
+Gabriel himself- AKA the Final boss;150;45;15;1

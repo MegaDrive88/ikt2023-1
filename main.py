@@ -1,9 +1,7 @@
 import tkinter
 from commands import *
 from PIL import Image, ImageTk
-import classes
-import events
-# import customtkinter
+
 enemies = []
 allitems = []
 save = []
@@ -58,11 +56,8 @@ def draw_smth(event):
 focanvas.bind("<Button-1>", get_x_and_y)
 focanvas.bind("<B1-Motion>", draw_smth)
 
-# # # tag_lower()
-
 focanvas.pack()
 
 ablak.mainloop()
 
 # pip install pillow
-# pip install customtkinter

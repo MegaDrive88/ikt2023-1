@@ -1,15 +1,15 @@
-Basic sword, atk, 10, 1, 1
-Stainless sword, atk, 10, 3, 1
-Silver sword, atk, 10, 5, 1
-Damasced sword, atk, 10, 15, 2
-Cursed sword, atk, 40, 12, 3
-Sword of Gabriel himself, atk, 70, 20, 5
-Basic mace, atk, 15, 5, 1
-Damasced mace, atk, 18, 10, 3
-Mace of the survivor, mag, 0, 90, 90, Restore Energy, 9
-Basic Health Potion, mag, 0, 0, 25, Restore Health, 2
+Basic sword, atk, 10, 5, 1
+Stainless sword, atk, 10, 8, 1
+Silver sword, atk, 10, 15, 1
+Damasced sword, atk, 10, 20, 2
+Cursed sword, atk, 20, 22, 3
+Sword of Gabriel himself, atk, 35, 30, 6
+Basic mace, atk, 15, 10, 1
+Damasced mace, atk, 18, 18, 3
+Mace of the survivor, mag, 0, 60, 60, Restore Energy, 9
+Basic Health Potion, mag, 0, 0, 30, Restore Health, 2
 Enhanced Health Potion, mag, 0, 0, 50, Restore Health, 4
 Basic Damage Potion, mag, 0, 0, 10, Boost DMG, 2
 Enhanced Damage Potion, mag, 0, 0, 30, Boost DMG, 4
 Constant Energy Potion, mag, 0, 0, 30, Restore Energy, 2
-Refreshing Energy Potion, mag, 0, 0, 40, Restore Energy, 4
+Refreshing Energy Potion, mag, 0, 0, 50, Restore Energy, 4
