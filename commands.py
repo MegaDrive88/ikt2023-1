@@ -107,7 +107,7 @@ def gamestart(bezar, enemies, items, save, ablak):
         if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0' or (enemy1neve.cget('text') == 'Dead' and level >= 15):
             print('end')
             fajl = open('save.txt', 'w', encoding='utf-8')
-            fajl.write(f'0;0;0;{"True" if enemy1neve.cget("text") == "Dead" and level >= 15 else "False"};{level}')
+            fajl.write(f'0;0;0;{"True" if enemy1neve.cget("text") == "Dead" and level >= 15 else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
             fajl.close()
             gamecanvas.pack_forget()
             endcanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#230259', relief='flat')
