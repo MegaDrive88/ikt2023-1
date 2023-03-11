@@ -1,6 +1,6 @@
 #cim1{
     font-family: Fette UNZ Fraktur;
-    color: #850505;
+    color: white;
     font-size: 100px;
     text-align: center;
     margin-bottom: 0px;
@@ -8,7 +8,7 @@
 
 #cim2{
     font-family: Fette UNZ Fraktur;
-    color: #850505;
+    color: white;
     font-size: 40px;
     text-align: center;
     margin-top: 10px;
@@ -16,14 +16,14 @@
 
 #cim3{
     font-family: Fette UNZ Fraktur;
-    color: #850505;
+    color: white;
     font-size: 50px;
     margin-bottom: 0px;
     text-align: center;
 }
 
 p, #navtext{
-    color: rgb(214, 4, 4);
+    color: rgb(255, 255, 255);
     padding-left: 100px;
     margin-top: 2px;
     padding: 6px;
@@ -56,8 +56,20 @@ body{
 }
 #text{
     text-align: center;
-    background-color: rgba(84, 108, 145, 0.4);
+    background-color: rgba(6, 96, 231, 0.5);
+    border: solid 5pt rgba(6, 96, 231, 0.8);
+    border-radius: 10pt;
 }
+.nav-item{
+    border: #850505;
+    border-width: 5px;
+    border-top: solid rgba(6, 96, 231, 0.8);
+    border-bottom: solid rgba(6, 96, 231, 0.5);
+}
+#cim1:hover, #cim2:hover, #cim3:hover, #navtext:hover{
+    color: #850505;
+}
+
 
 
 
