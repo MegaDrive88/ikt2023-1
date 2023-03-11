@@ -63,13 +63,32 @@ body{
 .nav-item{
     border: #850505;
     border-width: 5px;
-    border-top: solid rgba(6, 96, 231, 0.8);
+    border-top: solid rgba(6, 96, 231, 0.5);
     border-bottom: solid rgba(6, 96, 231, 0.5);
 }
-#cim1:hover, #cim2:hover, #cim3:hover, #navtext:hover{
+#cim1:hover, #cim2:hover, #cim3:hover, #navtext:hover, #sillag:hover{
     color: #850505;
 }
+.nav-item:hover{
+    border: solid rgba(6, 96, 231, 0.8);
+    background-color:rgba(6, 96, 231, 0.5);
+    
+}
 
+/* width */
+::-webkit-scrollbar {
+    width: 20px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgb(0, 225, 255);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(25, 0, 255, 0.5);
 
+  }
 
 

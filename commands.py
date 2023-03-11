@@ -84,7 +84,7 @@ def gamestart(bezar, enemies, items, save, ablak):
             gamecanvas.itemconfig(enemy2, image = None)
             gamecanvas.itemconfig(enemy3, image = None)
         else:
-            bosslabel.config(text='')
+            bosslabel.config(text='Weeklings')
         saveread(save, 'r')
         gamecanvas.update()
         while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
