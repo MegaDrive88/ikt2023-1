@@ -29,7 +29,7 @@ def gamestart(bezar, enemies, items, save, ablak):
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
     trash = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=trashkep, command= lambda: trashbutton(potilabel, item1, item2, item3, item4, level, items)) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
-    kilep = tkinter.Button(ablak, height=2, width=5, background='#ff7500', text="Exit", relief='flat', command = lambda: backtotitlescreen(bezar, gamecanvas))
+    kilep = tkinter.Button(ablak, height=2, width=5, background='#ff7500', text="Exit", relief='flat', command = lambda: backtotitlescreen(bezar, gamecanvas, True, save))
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
@@ -59,7 +59,6 @@ def gamestart(bezar, enemies, items, save, ablak):
     gamecanvas.create_window(642, 718, window=item3)
     gamecanvas.create_window(898, 718, window=item4)
     gamecanvas.create_window(972, 607, window=reroll)
-    # gamecanvas.create_window(60, 607, window=passgomb)
     gamecanvas.create_window(55, 607, window=trash)
     gamecanvas.create_window(974, 45, window=wavecounter)
     gamecanvas.create_window(970, 120, window=bosslabel)
@@ -94,7 +93,7 @@ def gamestart(bezar, enemies, items, save, ablak):
             turn = int(save[-1].split(';')[2])
             if turn % 2 == 0:
                 if str(level) == save[-1].split(';')[1]:
-                    rest = f'{level};{turn};{"True" if save[-1].split(";")[2] == "True" else "False"};{save[-1].split(";")[4]}'
+                    rest = f'{level};{turn};{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}'
                     fajl = open('save.txt', 'w', encoding='utf-8')
                     fajl.write(f'{0};{rest}')
                     fajl.close()
@@ -105,7 +104,6 @@ def gamestart(bezar, enemies, items, save, ablak):
                 enemyturn(save, turn, enemy1neve, enemy2neve, enemy3neve, bobhp, enemies, level)
                 pass
         if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0' or (enemy1neve.cget('text') == 'Dead' and level >= 15):
-            print('end')
             fajl = open('save.txt', 'w', encoding='utf-8')
             fajl.write(f'0;0;0;{"True" if enemy1neve.cget("text") == "Dead" and level >= 15 else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
             fajl.close()
@@ -113,14 +111,18 @@ def gamestart(bezar, enemies, items, save, ablak):
             endcanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#230259', relief='flat')
             endcanvas.pack()
             endlabel = tkinter.Label(ablak, background='#230259', foreground='#850505', text = "You win!" if enemy1neve.cget("text") == "Dead" and level >= 15 else "Game over", font = ('Fette UNZ Fraktur', 50))
-            kilepgomb = tkinter.Button(height = 1, width= 17, text='Back to title screen', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: backtotitlescreen(bezar, endcanvas))
+            kilepgomb = tkinter.Button(height = 1, width= 17, text='Back to title screen', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: backtotitlescreen(bezar, endcanvas, False, save))
             endcanvas.create_window(512, 160, window = endlabel)
             endcanvas.create_window(512, 350, window = kilepgomb)
             break
     ablak.mainloop()
 
-def backtotitlescreen(megnyit, bezar):
+def backtotitlescreen(megnyit, bezar, kelleirni, save):
     megnyit.pack()
+    if kelleirni:
+        fajl = open('save.txt', 'w', encoding='utf-8')
+        fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[-1]}')
+        fajl.close()
     bezar.pack_forget()
 
 def segitseg():
@@ -152,6 +154,7 @@ def trashbutton(selected, item1, item2, item3, item4, lvl, osszes):
             generateone(osszes, lista[c], lvl)
             break
     selected.config(text = '')
+
 def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes):
     items = [item1, item2, item3, item4]
     saveread(save, 'r')
@@ -202,7 +205,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                                 ben.config(text = f'Energy-{enbar}-{elozoen + int(mikettud[6])}')
                         case 'DMG:':
                             mult = int(mikettud[6])
-                            rest = f'{turn};{"True" if save[-1].split(";")[2] == "True" else "False"};{save[-1].split(";")[4]}'
+                            rest = f'{turn};{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}'
                             fajl = open('save.txt', 'w', encoding='utf-8')
                             fajl.write(f'{mult};{lvl+1};{rest}')
                             fajl.close()
@@ -217,7 +220,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
         turn += 1
         saveread(save, 'r')
         fajl = open('save.txt', 'w', encoding='utf-8')
-        rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[2] == "True" else "False"};{save[-1].split(";")[4]}']
+        rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
         fajl.write(f'{rest[0]};{turn};{rest[1]}')
         fajl.close()
 
@@ -244,13 +247,22 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
             hpbar = ''
             time.sleep(1)
             elozohp = int(bhp.cget('text').split('-')[2])
+            if int(elozohp) - int(ez) < 0:
+                bhp.config(text = 'h--0')
+                turn = int(save[-1].split(";")[2])
+                turn += 1
+                fajl = open('save.txt', 'w', encoding='utf-8')
+                rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
+                fajl.write(f'{rest[0]};{turn};{rest[1]}')
+                fajl.close()
+                return None
             for i in range(0, int(round((int(elozohp) - int(ez))/15, 0))):
                 hpbar += '█'
             bhp.config(text = f'Health-{hpbar}-{int(elozohp)-int(ez)}')
             turn = int(save[-1].split(";")[2])
             turn += 1
             fajl = open('save.txt', 'w', encoding='utf-8')
-            rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[2] == "True" else "False"};{save[-1].split(";")[4]}']
+            rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
             fajl.write(f'{rest[0]};{turn};{rest[1]}')
             fajl.close()
     else:
@@ -268,7 +280,7 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
         turn = int(save[-1].split(";")[2])
         turn += 1
         fajl = open('save.txt', 'w', encoding='utf-8')
-        rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[2] == "True" else "False"};{save[-1].split(";")[4]}']
+        rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
         fajl.write(f'{rest[0]};{turn};{rest[1]}')
         fajl.close()
             
