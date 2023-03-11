@@ -10,6 +10,9 @@ ablak.configure(bg='#ffffff')
 ablak.resizable(width=False, height=False)
 ablak.title('Bob\'s trip in HELL')
 focanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ffffff', relief='flat') # 230259
+def disableX():
+    pass
+ablak.protocol("WM_DELETE_WINDOW", disableX)
 def biztoshkilepszV2():
     focanvas.pack_forget()
     global subc
