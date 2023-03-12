@@ -7,7 +7,6 @@ import random
 import time
 
 def gamestart(bezar, enemies, items, save, ablak):
-    time.sleep(1)
     enemyread(enemies)
     itemread(items)
     bezar.pack_forget()
@@ -27,9 +26,9 @@ def gamestart(bezar, enemies, items, save, ablak):
     rerollkep = ImageTk.PhotoImage(Image.open('rerollkep.png').resize((60, 60)))
     trashkep = ImageTk.PhotoImage(Image.open('trashcan.png').resize((60, 60)))
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
-    trash = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=trashkep, command= lambda: trashbutton(potilabel, item1, item2, item3, item4, level, items)) 
+    trash = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=trashkep, command= lambda: trashbutton(potilabel, item1, item2, item3, item4, level, items, trash)) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
-    kilep = tkinter.Button(ablak, height=2, width=5, background='#ff7500', text="Exit", relief='flat', command = lambda: backtotitlescreen(bezar, gamecanvas, True, save))
+    kilep = tkinter.Button(ablak, height=2, width=5, background='#ff7500', text="Exit", relief='flat', command = lambda: backtotitlescreen(bezar, gamecanvas, True, save, level))
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
@@ -66,6 +65,7 @@ def gamestart(bezar, enemies, items, save, ablak):
     gamecanvas.create_window(20, 17, window=kilep)
     while level < 15:
         reroll["state"] = "normal"
+        trash["state"] = "normal"
         level += 1
         if int(bobenergy.cget('text').split('-')[2]) + 20>= 120:
             bobenergy.config(text = 'Energy-████████████-120')
@@ -83,7 +83,7 @@ def gamestart(bezar, enemies, items, save, ablak):
             gamecanvas.itemconfig(enemy2, image = None)
             gamecanvas.itemconfig(enemy3, image = None)
         else:
-            bosslabel.config(text='Weaklings')
+            bosslabel.config(text='Minions')
         saveread(save, 'r')
         gamecanvas.update()
         while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
@@ -105,23 +105,25 @@ def gamestart(bezar, enemies, items, save, ablak):
                 pass
         if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0' or (enemy1neve.cget('text') == 'Dead' and level >= 15):
             fajl = open('save.txt', 'w', encoding='utf-8')
-            fajl.write(f'0;0;0;{"True" if enemy1neve.cget("text") == "Dead" and level >= 15 else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
+            fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" or (enemy1neve.cget("text") == "Dead" and level >= 15) else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
             fajl.close()
             gamecanvas.pack_forget()
             endcanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#230259', relief='flat')
             endcanvas.pack()
+            ebg = ImageTk.PhotoImage(Image.open('bg2.webp').resize((1024, 780)))
+            endcanvas.create_image(512, 395, image = ebg)
             endlabel = tkinter.Label(ablak, background='#230259', foreground='#850505', text = "You win!" if enemy1neve.cget("text") == "Dead" and level >= 15 else "Game over", font = ('Fette UNZ Fraktur', 50))
-            kilepgomb = tkinter.Button(height = 1, width= 17, text='Back to title screen', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: backtotitlescreen(bezar, endcanvas, False, save))
+            kilepgomb = tkinter.Button(height = 1, width= 17, text='Back to title screen', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: backtotitlescreen(bezar, endcanvas, False, save, level))
             endcanvas.create_window(512, 160, window = endlabel)
             endcanvas.create_window(512, 350, window = kilepgomb)
             break
     ablak.mainloop()
 
-def backtotitlescreen(megnyit, bezar, kelleirni, save):
+def backtotitlescreen(megnyit, bezar, kelleirni, save, level):
     megnyit.pack()
     if kelleirni:
         fajl = open('save.txt', 'w', encoding='utf-8')
-        fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[-1]}')
+        fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
         fajl.close()
     bezar.pack_forget()
 
@@ -146,14 +148,15 @@ def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
     potilabel.config(text = 'You have no more rerolls this round')
     gomb["state"] = "disabled"
 
-def trashbutton(selected, item1, item2, item3, item4, lvl, osszes):
+def trashbutton(selected, item1, item2, item3, item4, lvl, osszes, gomb):
     lista = [item1, item2, item3, item4]
     melyiket = selected.cget('text').split('\n')[0]
     for c, i in enumerate(lista, 0):
         if i.cget('text') == melyiket:
             generateone(osszes, lista[c], lvl)
             break
-    selected.config(text = '')
+    selected.config(text = 'You can\'t throw more items to the trash until next round')
+    gomb["state"] = "disabled"
 
 def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes):
     items = [item1, item2, item3, item4]
@@ -172,6 +175,9 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                 clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[-1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
                 if int(float(clicked.cget("text").split(', ')[1])) <= 0:
                     clicked.config(text = 'Dead')
+            else:
+                selected.config(text = 'The enemy you tried to attack is already dead.')
+                return None
             enbar = ''
             minusz = int(selected.cget('text').split(', ')[0].split(':')[1])
             elozoen = ben.cget('text').split('-')[2]
@@ -236,10 +242,14 @@ def generateone(ebbol, item1, lvl):
 
 def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
     if lvl % 5 != 0:
-        enemyk = [e1n, e2n, e3n]
+        enemykraw = [e1n, e2n, e3n]
+        enemyk = []
+        for i in enemykraw:
+            if i.cget("text") != 'Dead':
+                enemyk.append(i)
         ez = 10
         if turn % 2 != 0:
-            melyik = random.randint(0, 2)
+            melyik = random.randint(0, len(enemyk)-1)
             for i in osszes:
                 if enemyk[melyik].cget('text').split(', ')[0] == i.name:
                     ez = i.dam

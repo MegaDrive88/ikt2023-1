@@ -1,10 +1,13 @@
 import tkinter
 from commands import *
 from PIL import Image, ImageTk
+import events
 
 enemies = []
 allitems = []
 save = []
+tempsave = []
+saveread(tempsave, 'r')
 ablak = tkinter.Tk()
 ablak.configure(bg='#ffffff')
 ablak.resizable(width=False, height=False)
@@ -36,7 +39,7 @@ cim2 = tkinter.Label(ablak, text = 'hell', font = ('Fette UNZ Fraktur', 80), for
 startgomb = tkinter.Button(height = 1, width= 12, text='Start game', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: gamestart(focanvas, enemies, allitems, save, ablak))
 helpgomb = tkinter.Button(height = 1, width= 12, text='Help', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = segitseg)
 exitgomb = tkinter.Button(height = 1, width= 12, text='Exit', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = biztoshkilepszV2)
-
+highscore = tkinter.Label(font = ('Fette UNZ Fraktur', 30), relief='flat', background='#ffffff', foreground='#850505', text = f'High score: {tempsave[-1].split(";")[-1]}')
 tuzkep = Image.open('tuz2.png')
 kep = ImageTk.PhotoImage(tuzkep)
 keplabel = tkinter.Label(image=kep, background='#ffffff')
@@ -46,6 +49,7 @@ focanvas.create_window(700, 130, window = cim2)
 focanvas.create_window(512, 290, window = startgomb)
 focanvas.create_window(512, 360, window = helpgomb)
 focanvas.create_window(512, 430, window = exitgomb)
+focanvas.create_window(512, 205, window = highscore)
 #RAJZOLÁS
 def get_x_and_y(event):
     global lasx, lasy
@@ -56,11 +60,16 @@ def draw_smth(event):
     focanvas.create_line((lasx, lasy, event.x, event.y), fill='#850505', width=2)
     
     lasx, lasy = event.x, event.y
-focanvas.bind("<Button-1>", get_x_and_y)
-focanvas.bind("<B1-Motion>", draw_smth)
+if tempsave[-1].split(';')[3] == 'True':
+    focanvas.bind("<Button-1>", get_x_and_y)
+    focanvas.bind("<B1-Motion>", draw_smth)
 
 focanvas.pack()
-
+def gethighscore():
+    saveread(tempsave, 'r')
+    highscore.config(text = f'High score: {tempsave[-1].split(";")[-1]}')
+    ablak.after(1200, gethighscore)
+ablak.after(1200, gethighscore)
 ablak.mainloop()
 
 # pip install pillow
