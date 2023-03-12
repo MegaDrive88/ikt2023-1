@@ -6,6 +6,7 @@ Cursed sword, atk, 20, 22, 3
 Sword of Gabriel himself, atk, 35, 30, 6
 Basic mace, atk, 15, 10, 1
 Damasced mace, atk, 18, 18, 3
+Basic handgun, atk, 8, 20, 4
 Mace of the survivor, mag, 0, 60, 60, Restore Energy, 9
 Basic Health Potion, mag, 0, 0, 30, Restore Health, 2
 Enhanced Health Potion, mag, 0, 0, 50, Restore Health, 4

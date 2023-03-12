@@ -17,6 +17,3 @@ def saveread(lista, modszer):
     else:
         return file
     file.close()
-    
-#<-multiplier, eddig tart, Kivitte-e, High-score->
-#https://www.unrealengine.com/marketplace/en-US/product/1690-rpg-icons
