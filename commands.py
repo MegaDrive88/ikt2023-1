@@ -7,7 +7,6 @@ import random
 import time
 
 def gamestart(bezar, enemies, items, save, ablak):
-    time.sleep(1)
     enemyread(enemies)
     itemread(items)
     bezar.pack_forget()
@@ -29,7 +28,7 @@ def gamestart(bezar, enemies, items, save, ablak):
     reroll = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=rerollkep, command= lambda: rerollbutton(items, level, item1, item2, item3, item4, potilabel, reroll))
     trash = tkinter.Button(ablak, height=80, width=100, background='#ffffff', text="", relief='flat', image=trashkep, command= lambda: trashbutton(potilabel, item1, item2, item3, item4, level, items)) 
     wavecounter = tkinter.Label(ablak, height=2, width=6, background='#ff7500', text=level, relief='flat', font=('Fette UNZ Fraktur', 25))
-    kilep = tkinter.Button(ablak, height=2, width=5, background='#ff7500', text="Exit", relief='flat', command = lambda: backtotitlescreen(bezar, gamecanvas, True, save))
+    kilep = tkinter.Button(ablak, height=2, width=5, background='#ff7500', text="Exit", relief='flat', command = lambda: backtotitlescreen(bezar, gamecanvas, True, save, level))
     enemy1neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy2neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
     enemy3neve = tkinter.Label(ablak, text='', height=2, background= '#ff7500')
@@ -83,7 +82,7 @@ def gamestart(bezar, enemies, items, save, ablak):
             gamecanvas.itemconfig(enemy2, image = None)
             gamecanvas.itemconfig(enemy3, image = None)
         else:
-            bosslabel.config(text='Weeklings')
+            bosslabel.config(text='Minions')
         saveread(save, 'r')
         gamecanvas.update()
         while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
@@ -110,18 +109,20 @@ def gamestart(bezar, enemies, items, save, ablak):
             gamecanvas.pack_forget()
             endcanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#230259', relief='flat')
             endcanvas.pack()
+            ebg = ImageTk.PhotoImage(Image.open('bg2.webp').resize((1024, 780)))
+            endcanvas.create_image(512, 395, image = ebg)
             endlabel = tkinter.Label(ablak, background='#230259', foreground='#850505', text = "You win!" if enemy1neve.cget("text") == "Dead" and level >= 15 else "Game over", font = ('Fette UNZ Fraktur', 50))
-            kilepgomb = tkinter.Button(height = 1, width= 17, text='Back to title screen', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: backtotitlescreen(bezar, endcanvas, False, save))
+            kilepgomb = tkinter.Button(height = 1, width= 17, text='Back to title screen', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: backtotitlescreen(bezar, endcanvas, False, save, level))
             endcanvas.create_window(512, 160, window = endlabel)
             endcanvas.create_window(512, 350, window = kilepgomb)
             break
     ablak.mainloop()
 
-def backtotitlescreen(megnyit, bezar, kelleirni, save):
+def backtotitlescreen(megnyit, bezar, kelleirni, save, level):
     megnyit.pack()
     if kelleirni:
         fajl = open('save.txt', 'w', encoding='utf-8')
-        fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[-1]}')
+        fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
         fajl.close()
     bezar.pack_forget()
 
