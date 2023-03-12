@@ -345,7 +345,7 @@ def itemgenerate(ebbol, item1, item2, item3, item4, lvl):
         if 'Potion' in i.cget('text'):
             x.append(i)
     if len(x) == 4:
-        while 'Potion' in i.cget('text'):
+        while 'Potion' in x[0].cget('text'):
             generateone(ebbol, x[0], lvl)
 
 def item1press(event, potilabel, ebbol):
