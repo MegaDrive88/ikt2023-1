@@ -1,7 +1,7 @@
 import tkinter
 from commands import *
 from PIL import Image, ImageTk
-import events
+from events import saveread
 
 enemies = []
 allitems = []
@@ -13,6 +13,7 @@ ablak.configure(bg='#ffffff')
 ablak.resizable(width=False, height=False)
 ablak.title('Bob\'s trip in HELL')
 focanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ffffff', relief='flat') # 230259
+ablak.iconbitmap("Basic imp.ico")
 def disableX():
     pass
 ablak.protocol("WM_DELETE_WINDOW", disableX)

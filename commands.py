@@ -153,7 +153,8 @@ def trashbutton(selected, item1, item2, item3, item4, lvl, osszes, gomb):
     melyiket = selected.cget('text').split('\n')[0]
     for c, i in enumerate(lista, 0):
         if i.cget('text') == melyiket:
-            generateone(osszes, lista[c], lvl)
+            while i.cget('text') == melyiket:
+                generateone(osszes, lista[c], lvl)
             break
     selected.config(text = 'You can\'t throw more items to the trash until next round')
     gomb["state"] = "disabled"
@@ -256,7 +257,17 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
                     break
             hpbar = ''
             time.sleep(1)
-            elozohp = int(bhp.cget('text').split('-')[2])
+            try:
+                elozohp = int(bhp.cget('text').split('-')[2])
+            except:
+                bhp.config(text = 'h--0')
+                turn = int(save[-1].split(";")[2])
+                turn += 1
+                fajl = open('save.txt', 'w', encoding='utf-8')
+                rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
+                fajl.write(f'{rest[0]};{turn};{rest[1]}')
+                fajl.close()
+                return None
             if int(elozohp) - int(ez) < 0:
                 bhp.config(text = 'h--0')
                 turn = int(save[-1].split(";")[2])
@@ -283,7 +294,26 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
                 break
         hpbar = ''
         time.sleep(1)
-        elozohp = int(bhp.cget('text').split('-')[2])
+        try:
+            elozohp = int(bhp.cget('text').split('-')[2])
+        except:
+            bhp.config(text = 'h--0')
+            turn = int(save[-1].split(";")[2])
+            turn += 1
+            fajl = open('save.txt', 'w', encoding='utf-8')
+            rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
+            fajl.write(f'{rest[0]};{turn};{rest[1]}')
+            fajl.close()
+            return None
+        if int(elozohp) - int(ez) < 0:
+            bhp.config(text = 'h--0')
+            turn = int(save[-1].split(";")[2])
+            turn += 1
+            fajl = open('save.txt', 'w', encoding='utf-8')
+            rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
+            fajl.write(f'{rest[0]};{turn};{rest[1]}')
+            fajl.close()
+            return None
         for i in range(0, int(round((int(elozohp) - int(ez))/15, 0))):
             hpbar += '█'
         bhp.config(text = f'Health-{hpbar}-{int(elozohp)-int(ez)}')
