@@ -9,8 +9,8 @@ def itemread(lista):
     for i in file:
         lista.append(Item(i))
     file.close()
-def saveread(lista, modszer):
-    file = open('save.txt' , modszer, encoding='utf-8')
+def saveread(lista, modszer, felhasznalo):
+    file = open(f'saves/save{felhasznalo}.txt' , modszer, encoding='utf-8')
     if modszer == 'r':
         for i in file:
             lista.append(i.strip())

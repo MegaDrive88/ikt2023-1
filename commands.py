@@ -6,7 +6,7 @@ from events import *
 import random
 import time
 
-def gamestart(bezar, enemies, items, save, ablak):
+def gamestart(bezar, enemies, items, save, ablak, felhnev):
     enemyread(enemies)
     itemread(items)
     bezar.pack_forget()
@@ -43,11 +43,11 @@ def gamestart(bezar, enemies, items, save, ablak):
     enemy1 = gamecanvas.create_image(512, 230, image = None)
     enemy2 = gamecanvas.create_image(312, 130, image = None)
     enemy3 = gamecanvas.create_image(712, 130, image = None)
-    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
-    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
-    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items))
-    bobhp = tkinter.Label(ablak, text = 'Health-███████████████-150', foreground='#06b82f')
-    bobenergy = tkinter.Label(ablak, text='Energy-████████████-120', foreground='#03b7f5')
+    gamecanvas.tag_bind(enemy1, "<Button-1>", lambda event: itemuse(gamecanvas, turn, enemy1neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, enemy1))
+    gamecanvas.tag_bind(enemy2, "<Button-1>", lambda event: itemuse(gamecanvas, turn, enemy2neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, enemy2))
+    gamecanvas.tag_bind(enemy3, "<Button-1>", lambda event: itemuse(gamecanvas, turn, enemy3neve, potilabel, bobhp, bobenergy, save, level, item1, item2, item3, item4, items, enemy3))
+    bobhp = tkinter.Label(ablak, text = 'Health-██████████-150', foreground='#06b82f')
+    bobenergy = tkinter.Label(ablak, text='Energy-██████████-120', foreground='#03b7f5')
     gamecanvas.create_window(512, 620, window=bobhp)
     gamecanvas.create_window(512, 640, window=bobenergy)
     gamecanvas.create_window(512, 352, window=enemy1neve)
@@ -68,7 +68,7 @@ def gamestart(bezar, enemies, items, save, ablak):
         trash["state"] = "normal"
         level += 1
         if int(bobenergy.cget('text').split('-')[2]) + 20>= 120:
-            bobenergy.config(text = 'Energy-████████████-120')
+            bobenergy.config(text = 'Energy-██████████-120')
         else:
             enbar = ''
             elozoen = int(bobenergy.cget('text').split('-')[2])
@@ -84,17 +84,17 @@ def gamestart(bezar, enemies, items, save, ablak):
             gamecanvas.itemconfig(enemy3, image = None)
         else:
             bosslabel.config(text='Minions')
-        saveread(save, 'r')
+        saveread(save, 'r', 'admin')
         gamecanvas.update()
         while enemy1neve.cget('text') != 'Dead' or enemy2neve.cget('text') != 'Dead' or enemy3neve.cget('text') != 'Dead':
             if level % 5 == 0 and enemy1neve.cget('text') == 'Dead':
                 break
-            saveread(save, 'r')
+            saveread(save, 'r', 'admin')
             turn = int(save[-1].split(';')[2])
             if turn % 2 == 0:
                 if str(level) == save[-1].split(';')[1]:
                     rest = f'{level};{turn};{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}'
-                    fajl = open('save.txt', 'w', encoding='utf-8')
+                    fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
                     fajl.write(f'{0};{rest}')
                     fajl.close()
                 if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0':
@@ -104,7 +104,7 @@ def gamestart(bezar, enemies, items, save, ablak):
                 enemyturn(save, turn, enemy1neve, enemy2neve, enemy3neve, bobhp, enemies, level)
                 pass
         if bobenergy.cget('text').split('-')[2] == '0' or bobhp.cget('text').split('-')[2] == '0' or (enemy1neve.cget('text') == 'Dead' and level >= 15):
-            fajl = open('save.txt', 'w', encoding='utf-8')
+            fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
             fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" or (enemy1neve.cget("text") == "Dead" and level >= 15) else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
             fajl.close()
             gamecanvas.pack_forget()
@@ -122,7 +122,7 @@ def gamestart(bezar, enemies, items, save, ablak):
 def backtotitlescreen(megnyit, bezar, kelleirni, save, level):
     megnyit.pack()
     if kelleirni:
-        fajl = open('save.txt', 'w', encoding='utf-8')
+        fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
         fajl.write(f'0;0;0;{"True" if save[-1].split(";")[3] == "True" else "False"};{level if level >= int(save[-1].split(";")[-1]) else save[-1].split(";")[-1]}')
         fajl.close()
     bezar.pack_forget()
@@ -131,11 +131,7 @@ def segitseg():
     webbrowser.open_new(r"help.html")
 
 def rerollbutton(ebbol, lvl, item1, item2, item3, item4, potilabel, gomb):
-    listaa = []
-    listaa.append(item1)
-    listaa.append(item2)
-    listaa.append(item3)
-    listaa.append(item4)
+    listaa = [item1, item2, item3, item4]
     for i in range(0, 4):
         ei = random.choice(ebbol)
         if ei.rese*5 - lvl*3 <= 7:
@@ -159,9 +155,9 @@ def trashbutton(selected, item1, item2, item3, item4, lvl, osszes, gomb):
     selected.config(text = 'You can\'t throw more items to the trash until next round')
     gomb["state"] = "disabled"
 
-def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes):
+def itemuse(ablak, turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, item4, osszes, enemymaga):
     items = [item1, item2, item3, item4]
-    saveread(save, 'r')
+    saveread(save, 'r', 'admin')
     global mult
     mult = int(save[-1].split(';')[0])
     if turn % 2 == 0:
@@ -176,6 +172,8 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                 clicked.config(text = f'{enemy[0]}, {round(int(float(enemy[-1]))-int(mikettud[1])*float(f"1.{mult}"), 0):.0f}')
                 if int(float(clicked.cget("text").split(', ')[1])) <= 0:
                     clicked.config(text = 'Dead')
+                    ures = ImageTk.PhotoImage(Image.open(f'enemies/ures.png').resize((100, 200)))
+                    ablak.itemconfig(enemymaga, image = ures)
             else:
                 selected.config(text = 'The enemy you tried to attack is already dead.')
                 return None
@@ -194,7 +192,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                     match mikettud[5]:
                         case 'Health:':
                             if int(bhp.cget('text').split('-')[2]) + int(mikettud[6]) >= 150:
-                                bhp.config(text = 'Health-███████████████-150')
+                                bhp.config(text = 'Health-██████████-150')
                             else:
                                 hpbar = ''
                                 elozohp = int(bhp.cget('text').split('-')[2])
@@ -203,7 +201,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                                 bhp.config(text = f'Health-{hpbar}-{elozohp + int(mikettud[6])}')
                         case 'Energy:':
                             if int(ben.cget('text').split('-')[2]) + int(mikettud[6]) >= 120:
-                                ben.config(text = 'Energy-████████████-120')
+                                ben.config(text = 'Energy-██████████-120')
                             else:
                                 enbar = ''
                                 elozoen = int(ben.cget('text').split('-')[2])
@@ -213,7 +211,7 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                         case 'DMG:':
                             mult = int(mikettud[6])
                             rest = f'{turn};{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}'
-                            fajl = open('save.txt', 'w', encoding='utf-8')
+                            fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
                             fajl.write(f'{mult};{lvl+1};{rest}')
                             fajl.close()
                         case _:
@@ -225,8 +223,8 @@ def itemuse(turn, clicked, selected, bhp, ben, save, lvl, item1, item2, item3, i
                 generateone(osszes, items[i], lvl)
         selected.config(text = '')
         turn += 1
-        saveread(save, 'r')
-        fajl = open('save.txt', 'w', encoding='utf-8')
+        saveread(save, 'r', 'admin')
+        fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
         rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
         fajl.write(f'{rest[0]};{turn};{rest[1]}')
         fajl.close()
@@ -263,7 +261,7 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
                 bhp.config(text = 'h--0')
                 turn = int(save[-1].split(";")[2])
                 turn += 1
-                fajl = open('save.txt', 'w', encoding='utf-8')
+                fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
                 rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
                 fajl.write(f'{rest[0]};{turn};{rest[1]}')
                 fajl.close()
@@ -272,7 +270,7 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
                 bhp.config(text = 'h--0')
                 turn = int(save[-1].split(";")[2])
                 turn += 1
-                fajl = open('save.txt', 'w', encoding='utf-8')
+                fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
                 rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
                 fajl.write(f'{rest[0]};{turn};{rest[1]}')
                 fajl.close()
@@ -282,7 +280,7 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
             bhp.config(text = f'Health-{hpbar}-{int(elozohp)-int(ez)}')
             turn = int(save[-1].split(";")[2])
             turn += 1
-            fajl = open('save.txt', 'w', encoding='utf-8')
+            fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
             rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
             fajl.write(f'{rest[0]};{turn};{rest[1]}')
             fajl.close()
@@ -300,7 +298,7 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
             bhp.config(text = 'h--0')
             turn = int(save[-1].split(";")[2])
             turn += 1
-            fajl = open('save.txt', 'w', encoding='utf-8')
+            fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
             rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
             fajl.write(f'{rest[0]};{turn};{rest[1]}')
             fajl.close()
@@ -309,7 +307,7 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
             bhp.config(text = 'h--0')
             turn = int(save[-1].split(";")[2])
             turn += 1
-            fajl = open('save.txt', 'w', encoding='utf-8')
+            fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
             rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
             fajl.write(f'{rest[0]};{turn};{rest[1]}')
             fajl.close()
@@ -319,7 +317,7 @@ def enemyturn(save, turn, e1n, e2n, e3n, bhp, osszes, lvl):
         bhp.config(text = f'Health-{hpbar}-{int(elozohp)-int(ez)}')
         turn = int(save[-1].split(";")[2])
         turn += 1
-        fajl = open('save.txt', 'w', encoding='utf-8')
+        fajl = open(f'saves/saveadmin.txt', 'w', encoding='utf-8')
         rest =  [f'{save[-1].split(";")[0]};{save[-1].split(";")[1]}', f'{"True" if save[-1].split(";")[3] == "True" else "False"};{save[-1].split(";")[4]}']
         fajl.write(f'{rest[0]};{turn};{rest[1]}')
         fajl.close()

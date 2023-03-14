@@ -7,7 +7,7 @@ enemies = []
 allitems = []
 save = []
 tempsave = []
-saveread(tempsave, 'r')
+saveread(tempsave, 'r', 'admin')
 ablak = tkinter.Tk()
 ablak.configure(bg='#ffffff')
 ablak.resizable(width=False, height=False)
@@ -37,7 +37,7 @@ def kilepnem():
 gamecanvas = tkinter.Canvas(ablak, height = 780, width = 1024, background= '#ffffff', relief='flat')
 cim = tkinter.Label(ablak, text = 'Bob\'s trip in', font = ('Fette UNZ Fraktur', 50), foreground = '#850505', background='#ffffff')
 cim2 = tkinter.Label(ablak, text = 'hell', font = ('Fette UNZ Fraktur', 80), foreground = '#850505', background='#ffffff')
-startgomb = tkinter.Button(height = 1, width= 12, text='Start game', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: gamestart(focanvas, enemies, allitems, save, ablak))
+startgomb = tkinter.Button(height = 1, width= 12, text='Start game', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = lambda: gamestart(focanvas, enemies, allitems, save, ablak, True))
 helpgomb = tkinter.Button(height = 1, width= 12, text='Help', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = segitseg)
 exitgomb = tkinter.Button(height = 1, width= 12, text='Exit', font = ('Fette UNZ Fraktur', 20), relief='ridge' , background='#fcba03', foreground='#850505', activebackground="#850505", activeforeground="#fcba03", command = biztoshkilepszV2)
 highscore = tkinter.Label(font = ('Fette UNZ Fraktur', 30), relief='flat', background='#ffffff', foreground='#850505', text = f'High score: {tempsave[-1].split(";")[-1]}')
@@ -67,10 +67,10 @@ if tempsave[-1].split(';')[3] == 'True':
 
 focanvas.pack()
 def gethighscore():
-    saveread(tempsave, 'r')
+    saveread(tempsave, 'r', 'admin')
     highscore.config(text = f'High score: {tempsave[-1].split(";")[-1]}')
-    ablak.after(1200, gethighscore)
-ablak.after(1200, gethighscore)
+    ablak.after(1000, gethighscore)
+ablak.after(1000, gethighscore)
 ablak.mainloop()
 
 # pip install pillow
